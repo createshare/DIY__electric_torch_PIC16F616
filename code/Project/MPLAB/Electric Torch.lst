@@ -1,0 +1,2835 @@
+
+
+HI-TECH Software PIC PRO Macro Assembler V9.82 build 9453 
+                                                                                               Fri Dec 27 20:36:26 2013
+
+HI-TECH Software Omniscient Code Generator (PRO mode) build 9453
+     1                           	processor	16F616
+     2                           	opt	pw 120
+     3                           	opt	pm
+     4                           	psect	config,global,class=CONFIG,delta=2
+     5                           	psect	nvBANK0,global,class=BANK0,space=1,delta=1
+     6                           	psect	cinit,global,class=CODE,delta=2
+     7                           	psect	bssCOMMON,global,class=COMMON,space=1,delta=1
+     8                           	psect	bssBANK0,global,class=BANK0,space=1,delta=1
+     9                           	psect	clrtext,global,class=CODE,delta=2
+    10                           	psect	cstackCOMMON,global,class=COMMON,space=1,delta=1
+    11                           	psect	cstackBANK0,global,class=BANK0,space=1,delta=1
+    12                           	psect	maintext,global,class=CODE,delta=2
+    13                           	psect	text468,local,class=CODE,delta=2
+    14                           	psect	swtext1,local,class=CONST,delta=2
+    15                           	psect	text469,local,class=CODE,delta=2
+    16                           	psect	swtext2,local,class=CONST,delta=2
+    17                           	psect	text470,local,class=CODE,delta=2
+    18                           	psect	text471,local,class=CODE,delta=2
+    19                           	psect	text472,local,class=CODE,delta=2
+    20                           	psect	text473,local,class=CODE,delta=2
+    21                           	psect	text474,local,class=CODE,delta=2
+    22                           	psect	text475,local,class=CODE,delta=2
+    23                           	psect	text476,local,class=CODE,delta=2
+    24                           	psect	text477,local,class=CODE,delta=2
+    25                           	psect	text478,local,class=CODE,delta=2
+    26                           	psect	text479,local,class=CODE,delta=2
+    27                           	psect	text480,local,class=CODE,delta=2
+    28                           	psect	text481,local,class=CODE,delta=2
+    29                           	psect	intentry,global,class=CODE,delta=2
+    30                           	psect	text482,local,class=CODE,delta=2
+    31                           	psect	text483,local,class=CODE,delta=2
+    32                           	psect	swtext3,local,class=CONST,delta=2
+    33                           	psect	text484,local,class=CODE,delta=2
+    34                           	psect	text485,local,class=CODE,delta=2
+    35                           	psect	text486,local,class=CODE,delta=2
+    36                           	psect	text487,local,class=CODE,delta=2
+    37                           	psect	text488,local,class=CODE,delta=2
+    38                           	psect	text489,local,class=CODE,delta=2
+    39                           	psect	text490,local,class=CODE,delta=2
+    40                           	psect	text491,local,class=CODE,delta=2
+    41                           	psect	text492,local,class=CODE,delta=2
+    42                           	psect	pa_nodes,global,class=CODE,delta=2
+    43                           	dabs	1,0x7E,2
+    44  000A                     	;#
+    45                           
+    46                           	psect	config
+    47  2007  FF84               	dw	65412	;#
+    48                           
+    49                           	psect	nvBANK0
+    50  0046                     __pnvBANK0:	
+    51  0046                     _G_WorkState:	
+    52  0046                     	ds	2
+    53  0048                     _DutyCycleValue:	
+    54  0048                     	ds	1
+    55  0049                     _G_KeyCnt:	
+    56  0049                     	ds	1
+    57  0015                     _CCP1CON	set	21
+    58  0013                     _CCPR1L	set	19
+    59  0005                     _PORTA	set	5
+    60  0007                     _PORTC	set	7
+    61  0012                     _T2CON	set	18
+    62  0001                     _TMR0	set	1
+    63  005F                     _GIE	set	95
+    64  005B                     _RAIE	set	91
+    65  0058                     _RAIF	set	88
+    66  0038                     _RC0	set	56
+    67  0039                     _RC1	set	57
+    68  005D                     _T0IE	set	93
+    69  005A                     _T0IF	set	90
+    70  0091                     _ANSEL	set	145
+    71  0092                     _PR2	set	146
+    72  0085                     _TRISA	set	133
+    73  0087                     _TRISC	set	135
+    74  04B2                     _IOCA2	set	1202
+    75  0408                     _PS0	set	1032
+    76  0409                     _PS1	set	1033
+    77  040A                     _PS2	set	1034
+    78  040B                     _PSA	set	1035
+    79  040D                     _T0CS	set	1037
+    80  042A                     _TRISA2	set	1066
+    81  0438                     _TRISC0	set	1080
+    82  0439                     _TRISC1	set	1081
+    83  043D                     _TRISC5	set	1085
+    84  04AA                     _WPUA2	set	1194
+    85  040F                     _nRAPU	set	1039
+    86                           
+    87                           	psect	cinit
+    88  0224                     start_initialization:	
+    89                           
+    90                           ; Clear objects allocated to COMMON
+    91  0224  3078               	movlw	low __pbssCOMMON
+    92  0225  0084               	movwf	4
+    93  0226  307E               	movlw	low (__pbssCOMMON+6)
+    94  0227  2243               	fcall	clear_ram
+    95  0228  3020               	movlw	low __pbssBANK0
+    96                           
+    97                           ; Clear objects allocated to BANK0
+    98  0229  1383               	bcf	3,7	;select IRP bank0
+    99  022A  0084               	movwf	4
+   100  022B  303A               	movlw	low (__pbssBANK0+26)
+   101  022C  2243               	fcall	clear_ram
+   102  022D                     end_of_initialization:	
+   103                           ;End of C runtime variable initialization code
+   104                           
+   105  022D  0183               	clrf	3
+   106  022E  29EA               	ljmp	_main	;jump to C main() function
+   107                           
+   108                           	psect	bssCOMMON
+   109  0078                     __pbssCOMMON:	
+   110  0078                     _G_10msCnt:	
+   111  0078                     	ds	1
+   112  0079                     _G_1ms_Case:	
+   113  0079                     	ds	1
+   114  007A                     _pKeyBuffer1:	
+   115  007A                     	ds	1
+   116  007B                     _pKeyCnt:	
+   117  007B                     	ds	1
+   118  007C                     _pKeyNullCnt:	
+   119  007C                     	ds	1
+   120  007D                     _pKeyResult:	
+   121  007D                     	ds	1
+   122                           
+   123                           	psect	bssBANK0
+   124  0020                     __pbssBANK0:	
+   125  0020                     _G_TimingCnt:	
+   126  0020                     	ds	4
+   127  0024                     _G_Timing_InWork_Cnt:	
+   128  0024                     	ds	4
+   129  0028                     _G_1sCnt:	
+   130  0028                     	ds	2
+   131  002A                     _G_250msCnt:	
+   132  002A                     	ds	2
+   133  002C                     _G_500msCnt:	
+   134  002C                     	ds	2
+   135  002E                     _KeyFlagBits:	
+   136  002E                     	ds	2
+   137  0030                     _LongKeyCnt:	
+   138  0030                     	ds	2
+   139  0032                     _TimeFlag1Bits:	
+   140  0032                     	ds	2
+   141  0034                     _WorkFlagBits:	
+   142  0034                     	ds	2
+   143  0036                     _ChangeCnt:	
+   144  0036                     	ds	1
+   145  0037                     _G_100msCnt:	
+   146  0037                     	ds	1
+   147  0038                     _KeyBuffer:	
+   148  0038                     	ds	1
+   149  0039                     _KeyValue:	
+   150  0039                     	ds	1
+   151                           
+   152                           	psect	clrtext
+   153  0243                     clear_ram:	
+   154                           ;	Called with FSR containing the base address, and
+   155                           ;	W with the last address+1
+   156                           
+   157  0243  0064               	clrwdt	;clear the watchdog before getting into this loop
+   158  0244                     clrloop:	
+   159  0244  0180               	clrf	0	;clear RAM location pointed to by FSR
+   160  0245  0A84               	incf	4,f	;increment pointer
+   161  0246  0604               	xorwf	4,w	;XOR with final address
+   162  0247  1903               	btfsc	3,2	;have we reached the end yet?
+   163  0248  3400               	retlw	0	;all done for this memory range, return
+   164  0249  0604               	xorwf	4,w	;XOR again to restore value
+   165  024A  2A44               	goto	clrloop	;do the next byte
+   166                           
+   167                           	psect	cstackCOMMON
+   168  0070                     __pcstackCOMMON:	
+   169  0070                     ?_System_Clock:	
+   170  0070                     ?_system_initial:	
+   171                           ; 0 bytes @ 0x0
+   172                           
+   173  0070                     ?_System_GetLoopClockTick:	
+   174                           ; 0 bytes @ 0x0
+   175                           
+   176  0070                     ?_Deal_Key:	
+   177                           ; 0 bytes @ 0x0
+   178                           
+   179  0070                     ?_Deal_WorkState:	
+   180                           ; 0 bytes @ 0x0
+   181                           
+   182  0070                     ?_System_Timing_Task:	
+   183                           ; 0 bytes @ 0x0
+   184                           
+   185  0070                     ??_System_Timing_Task:	
+   186                           ; 0 bytes @ 0x0
+   187                           
+   188  0070                     ?_System_1ms_Task:	
+   189                           ; 0 bytes @ 0x0
+   190                           
+   191  0070                     ??_System_1ms_Task:	
+   192                           ; 0 bytes @ 0x0
+   193                           
+   194  0070                     ?_System_10ms_Task:	
+   195                           ; 0 bytes @ 0x0
+   196                           
+   197  0070                     ??_System_10ms_Task:	
+   198                           ; 0 bytes @ 0x0
+   199                           
+   200  0070                     ?_System_100ms_Task:	
+   201                           ; 0 bytes @ 0x0
+   202                           
+   203  0070                     ??_System_100ms_Task:	
+   204                           ; 0 bytes @ 0x0
+   205                           
+   206  0070                     ?_System_250ms_Task:	
+   207                           ; 0 bytes @ 0x0
+   208                           
+   209  0070                     ??_System_250ms_Task:	
+   210                           ; 0 bytes @ 0x0
+   211                           
+   212  0070                     ?_System_500ms_Task:	
+   213                           ; 0 bytes @ 0x0
+   214                           
+   215  0070                     ??_System_500ms_Task:	
+   216                           ; 0 bytes @ 0x0
+   217                           
+   218  0070                     ?_System_1s_Task:	
+   219                           ; 0 bytes @ 0x0
+   220                           
+   221  0070                     ??_System_1s_Task:	
+   222                           ; 0 bytes @ 0x0
+   223                           
+   224  0070                     ?_Timing_In_Work:	
+   225                           ; 0 bytes @ 0x0
+   226                           
+   227  0070                     ??_Timing_In_Work:	
+   228                           ; 0 bytes @ 0x0
+   229                           
+   230  0070                     ?_INTS:	
+   231                           ; 0 bytes @ 0x0
+   232                           
+   233  0070                     ?_close_ccp1_pwm:	
+   234                           ; 0 bytes @ 0x0
+   235                           
+   236  0070                     ?_open_ccp1_pwm:	
+   237                           ; 0 bytes @ 0x0
+   238                           
+   239  0070                     ?_initial_ccp1_pwm:	
+   240                           ; 0 bytes @ 0x0
+   241                           
+   242  0070                     ?_Bright_GradualChange:	
+   243                           ; 0 bytes @ 0x0
+   244                           
+   245  0070                     ?_Scan_Key:	
+   246                           ; 0 bytes @ 0x0
+   247                           
+   248  0070                     ??_Scan_Key:	
+   249                           ; 0 bytes @ 0x0
+   250                           
+   251  0070                     ?_initial_osccon:	
+   252                           ; 0 bytes @ 0x0
+   253                           
+   254  0070                     ?_initial_port:	
+   255                           ; 0 bytes @ 0x0
+   256                           
+   257  0070                     ?_initial_timer0:	
+   258                           ; 0 bytes @ 0x0
+   259                           
+   260  0070                     ?_main:	
+   261                           ; 0 bytes @ 0x0
+   262                           
+   263                           
+   264                           ; 2 bytes @ 0x0
+   265  0070                     	ds	4
+   266  0074                     ??_System_Clock:	
+   267  0074                     ??_INTS:	
+   268                           ; 0 bytes @ 0x4
+   269                           
+   270                           
+   271                           ; 0 bytes @ 0x4
+   272  0074                     	ds	4
+   273                           
+   274                           	psect	cstackBANK0
+   275  003A                     __pcstackBANK0:	
+   276  003A                     ??_System_GetLoopClockTick:	
+   277  003A                     ??_close_ccp1_pwm:	
+   278                           ; 0 bytes @ 0x0
+   279                           
+   280  003A                     ??_open_ccp1_pwm:	
+   281                           ; 0 bytes @ 0x0
+   282                           
+   283  003A                     ??_initial_osccon:	
+   284                           ; 0 bytes @ 0x0
+   285                           
+   286  003A                     ??_initial_port:	
+   287                           ; 0 bytes @ 0x0
+   288                           
+   289  003A                     ??_initial_timer0:	
+   290                           ; 0 bytes @ 0x0
+   291                           
+   292  003A                     ?___wmul:	
+   293                           ; 0 bytes @ 0x0
+   294                           
+   295  003A                     ___wmul@multiplier:	
+   296                           ; 2 bytes @ 0x0
+   297                           
+   298                           
+   299                           ; 2 bytes @ 0x0
+   300  003A                     	ds	2
+   301  003C                     ___wmul@multiplicand:	
+   302                           
+   303                           ; 2 bytes @ 0x2
+   304  003C                     	ds	2
+   305  003E                     ??___wmul:	
+   306  003E                     ___wmul@product:	
+   307                           ; 0 bytes @ 0x4
+   308                           
+   309                           
+   310                           ; 2 bytes @ 0x4
+   311  003E                     	ds	2
+   312  0040                     ?_set_dutyCycle_ccp1_pwm:	
+   313  0040                     set_dutyCycle_ccp1_pwm@dutyCycle:	
+   314                           ; 0 bytes @ 0x6
+   315                           
+   316                           
+   317                           ; 2 bytes @ 0x6
+   318  0040                     	ds	2
+   319  0042                     ??_set_dutyCycle_ccp1_pwm:	
+   320                           
+   321                           ; 0 bytes @ 0x8
+   322  0042                     	ds	2
+   323  0044                     set_dutyCycle_ccp1_pwm@pwm_Value:	
+   324                           
+   325                           ; 2 bytes @ 0xA
+   326  0044                     	ds	2
+   327  0046                     ??_system_initial:	
+   328  0046                     ??_Deal_Key:	
+   329                           ; 0 bytes @ 0xC
+   330                           
+   331  0046                     ??_Deal_WorkState:	
+   332                           ; 0 bytes @ 0xC
+   333                           
+   334  0046                     ??_main:	
+   335                           ; 0 bytes @ 0xC
+   336                           
+   337  0046                     ??_initial_ccp1_pwm:	
+   338                           ; 0 bytes @ 0xC
+   339                           
+   340  0046                     ??_Bright_GradualChange:	
+   341                           ; 0 bytes @ 0xC
+   342                           
+   343                           
+   344                           	psect	maintext
+   345  01EA                     __pmaintext:	
+   346                           ; 0 bytes @ 0xC
+   347 ;;Data sizes: Strings 0, constant 0, data 0, bss 32, persistent 4 stack 0
+   348 ;;Auto spaces:   Size  Autos    Used
+   349 ;; COMMON          14      8      14
+   350 ;; BANK0           80     12      42
+   351 ;; BANK1           32      0       0
+   352 ;;
+   353 ;; Pointer list with targets:
+   354 ;; ?___wmul	unsigned int  size(1) Largest target is 0
+   355 ;;
+   356 ;;
+   357 ;; Critical Paths under _main in COMMON
+   358 ;;
+   359 ;;   None.
+   360 ;;
+   361 ;; Critical Paths under _INTS in COMMON
+   362 ;;
+   363 ;;   _System_Clock->_System_Timing_Task
+   364 ;;   _System_Clock->_Timing_In_Work
+   365 ;;
+   366 ;; Critical Paths under _main in BANK0
+   367 ;;
+   368 ;;   _Deal_WorkState->_set_dutyCycle_ccp1_pwm
+   369 ;;   _Bright_GradualChange->_set_dutyCycle_ccp1_pwm
+   370 ;;   _initial_ccp1_pwm->_set_dutyCycle_ccp1_pwm
+   371 ;;   _set_dutyCycle_ccp1_pwm->___wmul
+   372 ;;
+   373 ;; Critical Paths under _INTS in BANK0
+   374 ;;
+   375 ;;   None.
+   376 ;;
+   377 ;; Critical Paths under _main in BANK1
+   378 ;;
+   379 ;;   None.
+   380 ;;
+   381 ;; Critical Paths under _INTS in BANK1
+   382 ;;
+   383 ;;   None.
+   384 ;;
+   385 ;;Main: autosize = 0, tempsize = 0, incstack = 0, save=0
+   386 ;;
+   387 ;;
+   388 ;;Call Graph Tables:
+   389 ;;
+   390 ;; ---------------------------------------------------------------------------------
+   391 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+   392 ;; ---------------------------------------------------------------------------------
+   393 ;; (0) _main                                                 0     0      0     644
+   394 ;;                     _system_initial
+   395 ;;            _System_GetLoopClockTick
+   396 ;;                           _Deal_Key
+   397 ;;                     _Deal_WorkState
+   398 ;; ---------------------------------------------------------------------------------
+   399 ;; (1) _Deal_WorkState                                       0     0      0     322
+   400 ;;             _set_dutyCycle_ccp1_pwm
+   401 ;;                     _close_ccp1_pwm
+   402 ;;                      _open_ccp1_pwm
+   403 ;;               _Bright_GradualChange
+   404 ;; ---------------------------------------------------------------------------------
+   405 ;; (1) _Deal_Key                                             0     0      0     161
+   406 ;;               _Bright_GradualChange
+   407 ;; ---------------------------------------------------------------------------------
+   408 ;; (1) _system_initial                                       0     0      0     161
+   409 ;;                     _initial_osccon
+   410 ;;                       _initial_port
+   411 ;;                     _initial_timer0
+   412 ;;                   _initial_ccp1_pwm
+   413 ;; ---------------------------------------------------------------------------------
+   414 ;; (2) _Bright_GradualChange                                 0     0      0     161
+   415 ;;             _set_dutyCycle_ccp1_pwm
+   416 ;; ---------------------------------------------------------------------------------
+   417 ;; (2) _initial_ccp1_pwm                                     0     0      0     161
+   418 ;;             _set_dutyCycle_ccp1_pwm
+   419 ;;                      _open_ccp1_pwm
+   420 ;; ---------------------------------------------------------------------------------
+   421 ;; (3) _set_dutyCycle_ccp1_pwm                               6     4      2     161
+   422 ;;                                              6 BANK0      6     4      2
+   423 ;;                             ___wmul
+   424 ;; ---------------------------------------------------------------------------------
+   425 ;; (4) ___wmul                                               6     2      4      92
+   426 ;;                                              0 BANK0      6     2      4
+   427 ;; ---------------------------------------------------------------------------------
+   428 ;; (2) _initial_timer0                                       0     0      0       0
+   429 ;; ---------------------------------------------------------------------------------
+   430 ;; (2) _initial_port                                         0     0      0       0
+   431 ;; ---------------------------------------------------------------------------------
+   432 ;; (2) _initial_osccon                                       0     0      0       0
+   433 ;; ---------------------------------------------------------------------------------
+   434 ;; (2) _open_ccp1_pwm                                        0     0      0       0
+   435 ;; ---------------------------------------------------------------------------------
+   436 ;; (2) _close_ccp1_pwm                                       0     0      0       0
+   437 ;; ---------------------------------------------------------------------------------
+   438 ;; (1) _System_GetLoopClockTick                              0     0      0       0
+   439 ;; ---------------------------------------------------------------------------------
+   440 ;; Estimated maximum stack depth 4
+   441 ;; ---------------------------------------------------------------------------------
+   442 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+   443 ;; ---------------------------------------------------------------------------------
+   444 ;; (5) _INTS                                                 4     4      0       0
+   445 ;;                                              4 COMMON     4     4      0
+   446 ;;                       _System_Clock
+   447 ;; ---------------------------------------------------------------------------------
+   448 ;; (6) _System_Clock                                         0     0      0       0
+   449 ;;                 _System_Timing_Task
+   450 ;;                    _System_1ms_Task
+   451 ;;                   _System_10ms_Task
+   452 ;;                  _System_100ms_Task
+   453 ;;                  _System_250ms_Task
+   454 ;;                  _System_500ms_Task
+   455 ;;                     _System_1s_Task
+   456 ;;                     _Timing_In_Work
+   457 ;; ---------------------------------------------------------------------------------
+   458 ;; (7) _System_1ms_Task                                      0     0      0       0
+   459 ;;                           _Scan_Key
+   460 ;; ---------------------------------------------------------------------------------
+   461 ;; (7) _Timing_In_Work                                       4     4      0       0
+   462 ;;                                              0 COMMON     4     4      0
+   463 ;; ---------------------------------------------------------------------------------
+   464 ;; (7) _System_1s_Task                                       0     0      0       0
+   465 ;; ---------------------------------------------------------------------------------
+   466 ;; (7) _System_500ms_Task                                    0     0      0       0
+   467 ;; ---------------------------------------------------------------------------------
+   468 ;; (7) _System_250ms_Task                                    1     1      0       0
+   469 ;;                                              0 COMMON     1     1      0
+   470 ;; ---------------------------------------------------------------------------------
+   471 ;; (7) _System_100ms_Task                                    0     0      0       0
+   472 ;; ---------------------------------------------------------------------------------
+   473 ;; (7) _System_10ms_Task                                     0     0      0       0
+   474 ;; ---------------------------------------------------------------------------------
+   475 ;; (7) _System_Timing_Task                                   4     4      0       0
+   476 ;;                                              0 COMMON     4     4      0
+   477 ;; ---------------------------------------------------------------------------------
+   478 ;; (8) _Scan_Key                                             0     0      0       0
+   479 ;; ---------------------------------------------------------------------------------
+   480 ;; Estimated maximum stack depth 8
+   481 ;; ---------------------------------------------------------------------------------
+   482 ;; Call Graph Graphs:
+   483 ;; _main (ROOT)
+   484 ;;   _system_initial
+   485 ;;     _initial_osccon
+   486 ;;     _initial_port
+   487 ;;     _initial_timer0
+   488 ;;     _initial_ccp1_pwm
+   489 ;;       _set_dutyCycle_ccp1_pwm
+   490 ;;         ___wmul
+   491 ;;       _open_ccp1_pwm
+   492 ;;   _System_GetLoopClockTick
+   493 ;;   _Deal_Key
+   494 ;;     _Bright_GradualChange
+   495 ;;       _set_dutyCycle_ccp1_pwm
+   496 ;;         ___wmul
+   497 ;;   _Deal_WorkState
+   498 ;;     _set_dutyCycle_ccp1_pwm
+   499 ;;       ___wmul
+   500 ;;     _close_ccp1_pwm
+   501 ;;     _open_ccp1_pwm
+   502 ;;     _Bright_GradualChange
+   503 ;;       _set_dutyCycle_ccp1_pwm
+   504 ;;         ___wmul
+   505 ;;
+   506 ;; _INTS (ROOT)
+   507 ;;   _System_Clock
+   508 ;;     _System_Timing_Task
+   509 ;;     _System_1ms_Task
+   510 ;;       _Scan_Key
+   511 ;;     _System_10ms_Task
+   512 ;;     _System_100ms_Task
+   513 ;;     _System_250ms_Task
+   514 ;;     _System_500ms_Task
+   515 ;;     _System_1s_Task
+   516 ;;     _Timing_In_Work
+   517 ;;
+   518 ;; Address spaces:
+   519 ;;Name               Size   Autos  Total    Cost      Usage
+   520 ;;BITCOMMON            E      0       0       0        0.0%
+   521 ;;NULL                 0      0       0       0        0.0%
+   522 ;;CODE                 0      0       0       0        0.0%
+   523 ;;COMMON               E      8       E       1      100.0%
+   524 ;;BITSFR0              0      0       0       1        0.0%
+   525 ;;SFR0                 0      0       0       1        0.0%
+   526 ;;BITSFR1              0      0       0       2        0.0%
+   527 ;;SFR1                 0      0       0       2        0.0%
+   528 ;;STACK                0      0       C       2        0.0%
+   529 ;;BITBANK0            50      0       0       3        0.0%
+   530 ;;BANK0               50      C      2A       4       52.5%
+   531 ;;BANK1               20      0       0       5        0.0%
+   532 ;;ABS                  0      0      38       6        0.0%
+   533 ;;BITBANK1            20      0       0       7        0.0%
+   534 ;;DATA                 0      0      44       8        0.0%
+   535                           
+   536                           
+   537 ;; *************** function _main *****************
+   538 ;; Defined at:
+   539 ;;		line 151 in file "D:\Electric Torch\Project\Code\Main.c"
+   540 ;; Parameters:    Size  Location     Type
+   541 ;;		None
+   542 ;; Auto vars:     Size  Location     Type
+   543 ;;		None
+   544 ;; Return value:  Size  Location     Type
+   545 ;;                  2  573[COMMON] int 
+   546 ;; Registers used:
+   547 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+   548 ;; Tracked objects:
+   549 ;;		On entry : 17F/0
+   550 ;;		On exit  : 0/0
+   551 ;;		Unchanged: 0/0
+   552 ;; Data sizes:     COMMON   BANK0   BANK1
+   553 ;;      Params:         0       0       0
+   554 ;;      Locals:         0       0       0
+   555 ;;      Temps:          0       0       0
+   556 ;;      Totals:         0       0       0
+   557 ;;Total ram usage:        0 bytes
+   558 ;; Hardware stack levels required when called:    8
+   559 ;; This function calls:
+   560 ;;		_system_initial
+   561 ;;		_System_GetLoopClockTick
+   562 ;;		_Deal_Key
+   563 ;;		_Deal_WorkState
+   564 ;; This function is called by:
+   565 ;;		Startup code after reset
+   566 ;; This function uses a non-reentrant model
+   567 ;;
+   568  01EA                     _main:	
+   569                           
+   570                           ;Main.c: 152: system_initial();
+   571                           
+   572                           ; Regs used in _main: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+   573  01EA  226A               	fcall	_system_initial
+   574  01EB  3002               	movlw	2
+   575                           
+   576                           ;Main.c: 155: G_KeyCnt = 1;
+   577  01EC  1283               	bcf	3,5	;RP0=0, select bank0
+   578  01ED  01C9               	clrf	_G_KeyCnt
+   579  01EE  0AC9               	incf	_G_KeyCnt,f
+   580                           
+   581                           ;Main.c: 156: G_WorkState = (0x8002);
+   582  01EF  00C6               	movwf	_G_WorkState
+   583  01F0  3080               	movlw	128
+   584  01F1  00C7               	movwf	_G_WorkState+1
+   585                           
+   586                           ;Main.c: 157: DutyCycleValue = 100;
+   587  01F2  3064               	movlw	100
+   588  01F3  00C8               	movwf	_DutyCycleValue
+   589  01F4                     l4326:	
+   590                           
+   591                           ;Main.c: 160: {
+   592                           ;Main.c: 163: System_GetLoopClockTick();
+   593  01F4  2270               	fcall	_System_GetLoopClockTick
+   594                           
+   595                           ;Main.c: 165: RC1 =!RC1;
+   596  01F5  3002               	movlw	2
+   597  01F6  0687               	xorwf	7,f
+   598                           
+   599                           ;Main.c: 168: Deal_Key();
+   600  01F7  2010               	fcall	_Deal_Key
+   601                           
+   602                           ;Main.c: 172: Deal_WorkState();
+   603  01F8  20CD               	fcall	_Deal_WorkState
+   604  01F9  29F4               	goto	l4326
+   605  01FA                     __end_of_main:	
+   606                           
+   607                           	psect	text468
+   608  00CD                     __ptext468:	
+   609 ;; =============== function _main ends ============
+   610                           
+   611                           
+   612 ;; *************** function _Deal_WorkState *****************
+   613 ;; Defined at:
+   614 ;;		line 295 in file "D:\Electric Torch\Project\Code\MyProject.c"
+   615 ;; Parameters:    Size  Location     Type
+   616 ;;		None
+   617 ;; Auto vars:     Size  Location     Type
+   618 ;;		None
+   619 ;; Return value:  Size  Location     Type
+   620 ;;		None               void
+   621 ;; Registers used:
+   622 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+   623 ;; Tracked objects:
+   624 ;;		On entry : 20/0
+   625 ;;		On exit  : 0/0
+   626 ;;		Unchanged: 0/0
+   627 ;; Data sizes:     COMMON   BANK0   BANK1
+   628 ;;      Params:         0       0       0
+   629 ;;      Locals:         0       0       0
+   630 ;;      Temps:          0       0       0
+   631 ;;      Totals:         0       0       0
+   632 ;;Total ram usage:        0 bytes
+   633 ;; Hardware stack levels used:    1
+   634 ;; Hardware stack levels required when called:    7
+   635 ;; This function calls:
+   636 ;;		_set_dutyCycle_ccp1_pwm
+   637 ;;		_close_ccp1_pwm
+   638 ;;		_open_ccp1_pwm
+   639 ;;		_Bright_GradualChange
+   640 ;; This function is called by:
+   641 ;;		_main
+   642 ;; This function uses a non-reentrant model
+   643 ;;
+   644  00CD                     _Deal_WorkState:	
+   645                           
+   646                           ; Switch on 2 bytes has been partitioned into a top level switch of size 1, and 1 sub-sw
+      +                          itches
+   647                           ; Switch size 1, requested type "space"
+   648                           ; Number of cases is 1, Range of values is 128 to 128
+   649                           ; switch strategies available:
+   650                           ; Name         Instructions Cycles
+   651                           ; simple_byte            4     3 (average)
+   652                           ; direct_byte           10     9 (fixed)
+   653                           ; jumptable            263     9 (fixed)
+   654                           ;	Chosen strategy is simple_byte
+   655                           
+   656                           ;MyProject.c: 354: break;
+   657                           
+   658                           ;MyProject.c: 301: switch(G_WorkState)
+   659                           
+   660                           ; Regs used in _Deal_WorkState: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+   661  00CD  0847               	movf	_G_WorkState+1,w
+   662  00CE  3A80               	xorlw	128	; case 128
+   663  00CF  1903               	skipnz
+   664  00D0  28F5               	goto	l4392
+   665  00D1  2900               	goto	l1200
+   666  00D2                     l4256:	
+   667                           
+   668                           ;MyProject.c: 307: set_dutyCycle_ccp1_pwm(DutyCycleValue);
+   669  00D2  0848               	movf	_DutyCycleValue,w
+   670  00D3  00C0               	movwf	?_set_dutyCycle_ccp1_pwm
+   671  00D4  01C1               	clrf	?_set_dutyCycle_ccp1_pwm+1
+   672  00D5  2101               	fcall	_set_dutyCycle_ccp1_pwm
+   673                           
+   674                           ;MyProject.c: 308: close_ccp1_pwm();
+   675  00D6  227D               	fcall	_close_ccp1_pwm
+   676                           
+   677                           ;MyProject.c: 310: _nop(); _nop(); _nop(); _nop();
+   678  00D7  0000               	nop
+   679  00D8  0000               	nop
+   680  00D9  0000               	nop
+   681  00DA  0000               	nop
+   682  00DB  0063               	sleep	;#
+   683                           
+   684                           ;MyProject.c: 312: _nop(); _nop(); _nop(); _nop();
+   685  00DC  0000               	nop
+   686  00DD  0000               	nop
+   687  00DE  0000               	nop
+   688  00DF  0000               	nop
+   689                           
+   690                           ;MyProject.c: 314: G_WorkState = (0x8000);
+   691  00E0  3080               	movlw	128
+   692  00E1  1283               	bcf	3,5	;RP0=0, select bank0
+   693  00E2  01C6               	clrf	_G_WorkState
+   694  00E3  00C7               	movwf	_G_WorkState+1
+   695                           
+   696                           ;MyProject.c: 320: KeyValue = (0xFF);
+   697  00E4  30FF               	movlw	255
+   698  00E5  00B9               	movwf	_KeyValue
+   699                           
+   700                           ;MyProject.c: 321: KeyFlagBits.b.f3 = 1;
+   701  00E6  15AE               	bsf	_KeyFlagBits,3
+   702                           
+   703                           ;MyProject.c: 322: break;
+   704  00E7  0008               	return
+   705  00E8                     l4280:	
+   706                           
+   707                           ;MyProject.c: 325: set_dutyCycle_ccp1_pwm(DutyCycleValue);
+   708  00E8  0848               	movf	_DutyCycleValue,w
+   709  00E9  00C0               	movwf	?_set_dutyCycle_ccp1_pwm
+   710  00EA  01C1               	clrf	?_set_dutyCycle_ccp1_pwm+1
+   711  00EB  2101               	fcall	_set_dutyCycle_ccp1_pwm
+   712  00EC                     l4282:	
+   713                           
+   714                           ;MyProject.c: 326: open_ccp1_pwm();
+   715  00EC  2A7A               	ljmp	l3958
+   716  00ED                     l4296:	
+   717                           ;MyProject.c: 327: break;
+   718                           
+   719                           
+   720                           ;MyProject.c: 346: set_dutyCycle_ccp1_pwm(DutyCycleValue);
+   721  00ED  0848               	movf	_DutyCycleValue,w
+   722  00EE  00C0               	movwf	?_set_dutyCycle_ccp1_pwm
+   723  00EF  01C1               	clrf	?_set_dutyCycle_ccp1_pwm+1
+   724  00F0  2101               	fcall	_set_dutyCycle_ccp1_pwm
+   725                           
+   726                           ;MyProject.c: 348: if(TimeFlag1Bits.b.f9) open_ccp1_pwm();
+   727  00F1  18B3               	btfsc	_TimeFlag1Bits+1,1
+   728  00F2  28EC               	goto	l4282
+   729                           
+   730                           ;MyProject.c: 349: else close_ccp1_pwm();
+   731  00F3  2A7D               	ljmp	l3956
+   732  00F4                     l4304:	
+   733                           
+   734                           ;MyProject.c: 353: Bright_GradualChange();
+   735  00F4  29AE               	ljmp	l4160
+   736  00F5                     l4392:	
+   737                           
+   738                           ; Switch size 1, requested type "space"
+   739                           ; Number of cases is 8, Range of values is 0 to 7
+   740                           ; switch strategies available:
+   741                           ; Name         Instructions Cycles
+   742                           ; direct_byte           14     6 (fixed)
+   743                           ; simple_byte           25    13 (average)
+   744                           ; jumptable            260     6 (fixed)
+   745                           ; rangetable            12     6 (fixed)
+   746                           ; spacedrange           22     9 (fixed)
+   747                           ; locatedrange           8     3 (fixed)
+   748                           ;	Chosen strategy is direct_byte
+   749  00F5  0846               	movf	_G_WorkState,w
+   750  00F6  0084               	movwf	4
+   751  00F7  3008               	movlw	8
+   752  00F8  0204               	subwf	4,w
+   753  00F9  1803               	skipnc
+   754  00FA  0008               	return
+   755  00FB  3002               	movlw	high S4394
+   756  00FC  008A               	movwf	10
+   757  00FD  304B               	movlw	low S4394
+   758  00FE  0704               	addwf	4,w
+   759  00FF  0082               	movwf	2
+   760  0100                     l1200:	
+   761  0100  0008               	return
+   762  0101                     __end_of_Deal_WorkState:	
+   763                           
+   764                           	psect	swtext1
+   765  024B                     __pswtext1:	
+   766  024B                     S4394:	
+   767  024B  2900               	ljmp	l1200
+   768  024C  28D2               	ljmp	l4256
+   769  024D  28E8               	ljmp	l4280
+   770  024E  28E8               	ljmp	l4280
+   771  024F  28E8               	ljmp	l4280
+   772  0250  28E8               	ljmp	l4280
+   773  0251  28ED               	ljmp	l4296
+   774  0252  28F4               	ljmp	l4304
+   775                           
+   776                           	psect	text469
+   777  0010                     __ptext469:	
+   778 ;; =============== function _Deal_WorkState ends ============
+   779                           
+   780                           
+   781 ;; *************** function _Deal_Key *****************
+   782 ;; Defined at:
+   783 ;;		line 194 in file "D:\Electric Torch\Project\Code\MyProject.c"
+   784 ;; Parameters:    Size  Location     Type
+   785 ;;		None
+   786 ;; Auto vars:     Size  Location     Type
+   787 ;;		None
+   788 ;; Return value:  Size  Location     Type
+   789 ;;		None               void
+   790 ;; Registers used:
+   791 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+   792 ;; Tracked objects:
+   793 ;;		On entry : 20/0
+   794 ;;		On exit  : 20/0
+   795 ;;		Unchanged: FFFDF/0
+   796 ;; Data sizes:     COMMON   BANK0   BANK1
+   797 ;;      Params:         0       0       0
+   798 ;;      Locals:         0       0       0
+   799 ;;      Temps:          0       0       0
+   800 ;;      Totals:         0       0       0
+   801 ;;Total ram usage:        0 bytes
+   802 ;; Hardware stack levels used:    1
+   803 ;; Hardware stack levels required when called:    7
+   804 ;; This function calls:
+   805 ;;		_Bright_GradualChange
+   806 ;; This function is called by:
+   807 ;;		_main
+   808 ;; This function uses a non-reentrant model
+   809 ;;
+   810  0010                     _Deal_Key:	
+   811                           
+   812                           ;MyProject.c: 198: if(KeyBuffer != (0xFF))
+   813                           
+   814                           ; Regs used in _Deal_Key: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+   815  0010  0838               	movf	_KeyBuffer,w
+   816  0011  3AFF               	xorlw	255
+   817  0012  1903               	skipnz
+   818  0013  281D               	goto	l4198
+   819                           
+   820                           ;MyProject.c: 199: {
+   821                           ;MyProject.c: 200: if(LongKeyCnt > (500))
+   822  0014  3001               	movlw	1
+   823  0015  0231               	subwf	_LongKeyCnt+1,w
+   824  0016  30F5               	movlw	245
+   825  0017  1903               	skipnz
+   826  0018  0230               	subwf	_LongKeyCnt,w
+   827  0019  1C03               	skipc
+   828  001A  281D               	goto	l4198
+   829                           
+   830                           ;MyProject.c: 201: {
+   831                           ;MyProject.c: 202: KeyFlagBits.b.f2 = 0;
+   832  001B  112E               	bcf	_KeyFlagBits,2
+   833                           
+   834                           ;MyProject.c: 204: Bright_GradualChange();
+   835  001C  21AE               	fcall	_Bright_GradualChange
+   836  001D                     l4198:	
+   837                           
+   838                           ;MyProject.c: 205: }
+   839                           ;MyProject.c: 206: }
+   840                           ;MyProject.c: 209: if((KeyBuffer == (0xFF))&&(LongKeyCnt > (500)))
+   841  001D  0838               	movf	_KeyBuffer,w
+   842  001E  3AFF               	xorlw	255
+   843  001F  1D03               	skipz
+   844  0020  282A               	goto	l4204
+   845  0021  3001               	movlw	1
+   846  0022  0231               	subwf	_LongKeyCnt+1,w
+   847  0023  30F5               	movlw	245
+   848  0024  1903               	skipnz
+   849  0025  0230               	subwf	_LongKeyCnt,w
+   850  0026  1C03               	skipc
+   851  0027  282A               	goto	l4204
+   852                           
+   853                           ;MyProject.c: 210: {
+   854                           ;MyProject.c: 211: LongKeyCnt = 0;
+   855  0028  01B0               	clrf	_LongKeyCnt
+   856  0029  01B1               	clrf	_LongKeyCnt+1
+   857  002A                     l4204:	
+   858                           
+   859                           ;MyProject.c: 212: }
+   860                           ;MyProject.c: 216: if((KeyBuffer == (0xFF))&&(LongKeyCnt > (200)))
+   861  002A  0838               	movf	_KeyBuffer,w
+   862  002B  3AFF               	xorlw	255
+   863  002C  1D03               	skipz
+   864  002D  283C               	goto	l1169
+   865  002E  3000               	movlw	0
+   866  002F  0231               	subwf	_LongKeyCnt+1,w
+   867  0030  30C9               	movlw	201
+   868  0031  1903               	skipnz
+   869  0032  0230               	subwf	_LongKeyCnt,w
+   870  0033  1C03               	skipc
+   871  0034  283C               	goto	l1169
+   872  0035  3001               	movlw	1
+   873                           
+   874                           ;MyProject.c: 217: {
+   875                           ;MyProject.c: 218: KeyFlagBits.b.f2 = 0;
+   876  0036  112E               	bcf	_KeyFlagBits,2
+   877                           
+   878                           ;MyProject.c: 219: G_KeyCnt = 0;
+   879  0037  01C9               	clrf	_G_KeyCnt
+   880                           
+   881                           ;MyProject.c: 221: G_WorkState = (0x8001);
+   882  0038  00C6               	movwf	_G_WorkState
+   883  0039  3080               	movlw	128
+   884  003A  00C7               	movwf	_G_WorkState+1
+   885                           
+   886                           ;MyProject.c: 222: DutyCycleValue = 0;
+   887  003B  01C8               	clrf	_DutyCycleValue
+   888  003C                     l1169:	
+   889                           
+   890                           ;MyProject.c: 223: }
+   891                           ;MyProject.c: 226: if(KeyBuffer != (0xFF))
+   892  003C  0838               	movf	_KeyBuffer,w
+   893  003D  3AFF               	xorlw	255
+   894  003E  1903               	skipnz
+   895  003F  2844               	goto	l4218
+   896                           
+   897                           ;MyProject.c: 227: {
+   898                           ;MyProject.c: 228: LongKeyCnt ++;
+   899  0040  0AB0               	incf	_LongKeyCnt,f
+   900  0041  1903               	skipnz
+   901  0042  0AB1               	incf	_LongKeyCnt+1,f
+   902                           
+   903                           ;MyProject.c: 229: }
+   904  0043  2846               	goto	l4220
+   905  0044                     l4218:	
+   906                           
+   907                           ;MyProject.c: 230: else LongKeyCnt = 0;
+   908  0044  01B0               	clrf	_LongKeyCnt
+   909  0045  01B1               	clrf	_LongKeyCnt+1
+   910  0046                     l4220:	
+   911                           
+   912                           ;MyProject.c: 235: if(KeyFlagBits.b.f2 && (KeyBuffer == (0xFF)))
+   913  0046  1D2E               	btfss	_KeyFlagBits,2
+   914  0047  0008               	return
+   915  0048  0838               	movf	_KeyBuffer,w
+   916  0049  3AFF               	xorlw	255
+   917  004A  1D03               	skipz
+   918  004B  0008               	return
+   919  004C  3007               	movlw	7
+   920                           
+   921                           ;MyProject.c: 236: {
+   922                           ;MyProject.c: 237: KeyFlagBits.b.f2 = 0;
+   923  004D  112E               	bcf	_KeyFlagBits,2
+   924                           
+   925                           ;MyProject.c: 239: G_KeyCnt ++ ;
+   926  004E  0AC9               	incf	_G_KeyCnt,f
+   927                           
+   928                           ;MyProject.c: 240: if(G_KeyCnt > 6) G_KeyCnt = 0;
+   929  004F  0249               	subwf	_G_KeyCnt,w
+   930  0050  1C03               	skipc
+   931  0051  2884               	goto	l4250
+   932  0052  01C9               	clrf	_G_KeyCnt
+   933  0053  2884               	goto	l4250
+   934  0054                     l4232:	
+   935                           
+   936                           ;MyProject.c: 245: G_WorkState = (0x8001);
+   937  0054  3001               	movlw	1
+   938  0055  00C6               	movwf	_G_WorkState
+   939  0056  3080               	movlw	128
+   940  0057  00C7               	movwf	_G_WorkState+1
+   941                           
+   942                           ;MyProject.c: 246: DutyCycleValue = 0;
+   943  0058  01C8               	clrf	_DutyCycleValue
+   944                           
+   945                           ;MyProject.c: 247: break;
+   946  0059  0008               	return
+   947  005A                     l4236:	
+   948                           
+   949                           ;MyProject.c: 250: G_WorkState = (0x8002);
+   950  005A  3002               	movlw	2
+   951  005B  00C6               	movwf	_G_WorkState
+   952  005C  3080               	movlw	128
+   953  005D  00C7               	movwf	_G_WorkState+1
+   954                           
+   955                           ;MyProject.c: 251: DutyCycleValue = 100;
+   956  005E  3064               	movlw	100
+   957  005F  00C8               	movwf	_DutyCycleValue
+   958                           
+   959                           ;MyProject.c: 252: break;
+   960  0060  0008               	return
+   961  0061                     l4238:	
+   962                           
+   963                           ;MyProject.c: 255: G_WorkState = (0x8003);
+   964  0061  3003               	movlw	3
+   965  0062  00C6               	movwf	_G_WorkState
+   966  0063  3080               	movlw	128
+   967  0064  00C7               	movwf	_G_WorkState+1
+   968                           
+   969                           ;MyProject.c: 256: DutyCycleValue = 70;
+   970  0065  3046               	movlw	70
+   971  0066  00C8               	movwf	_DutyCycleValue
+   972                           
+   973                           ;MyProject.c: 257: break;
+   974  0067  0008               	return
+   975  0068                     l4240:	
+   976                           
+   977                           ;MyProject.c: 260: G_WorkState = (0x8004);
+   978  0068  3004               	movlw	4
+   979  0069  00C6               	movwf	_G_WorkState
+   980  006A  3080               	movlw	128
+   981  006B  00C7               	movwf	_G_WorkState+1
+   982                           
+   983                           ;MyProject.c: 261: DutyCycleValue = 40;
+   984  006C  3028               	movlw	40
+   985  006D  00C8               	movwf	_DutyCycleValue
+   986                           
+   987                           ;MyProject.c: 262: break;
+   988  006E  0008               	return
+   989  006F                     l4242:	
+   990                           
+   991                           ;MyProject.c: 265: G_WorkState = (0x8005);
+   992  006F  3005               	movlw	5
+   993  0070  00C6               	movwf	_G_WorkState
+   994  0071  3080               	movlw	128
+   995  0072  00C7               	movwf	_G_WorkState+1
+   996                           
+   997                           ;MyProject.c: 266: DutyCycleValue = 10;
+   998  0073  300A               	movlw	10
+   999  0074  00C8               	movwf	_DutyCycleValue
+  1000                           
+  1001                           ;MyProject.c: 267: break;
+  1002  0075  0008               	return
+  1003  0076                     l4244:	
+  1004                           
+  1005                           ;MyProject.c: 270: G_WorkState = (0x8006);
+  1006  0076  3006               	movlw	6
+  1007  0077  00C6               	movwf	_G_WorkState
+  1008  0078  3080               	movlw	128
+  1009  0079  00C7               	movwf	_G_WorkState+1
+  1010                           
+  1011                           ;MyProject.c: 271: DutyCycleValue = 100;
+  1012  007A  3064               	movlw	100
+  1013  007B  00C8               	movwf	_DutyCycleValue
+  1014                           
+  1015                           ;MyProject.c: 272: break;
+  1016  007C  0008               	return
+  1017  007D                     l4246:	
+  1018                           
+  1019                           ;MyProject.c: 275: G_WorkState = (0x8007);
+  1020  007D  3007               	movlw	7
+  1021  007E  00C6               	movwf	_G_WorkState
+  1022  007F  3080               	movlw	128
+  1023  0080  00C7               	movwf	_G_WorkState+1
+  1024                           
+  1025                           ;MyProject.c: 276: DutyCycleValue = 50;
+  1026  0081  3032               	movlw	50
+  1027  0082  00C8               	movwf	_DutyCycleValue
+  1028                           
+  1029                           ;MyProject.c: 277: break;
+  1030  0083  0008               	return
+  1031  0084                     l4250:	
+  1032  0084  0849               	movf	_G_KeyCnt,w
+  1033                           
+  1034                           ; Switch size 1, requested type "space"
+  1035                           ; Number of cases is 7, Range of values is 0 to 6
+  1036                           ; switch strategies available:
+  1037                           ; Name         Instructions Cycles
+  1038                           ; direct_byte           13     6 (fixed)
+  1039                           ; simple_byte           22    12 (average)
+  1040                           ; jumptable            260     6 (fixed)
+  1041                           ; rangetable            11     6 (fixed)
+  1042                           ; spacedrange           20     9 (fixed)
+  1043                           ; locatedrange           7     3 (fixed)
+  1044                           ;	Chosen strategy is direct_byte
+  1045  0085  0084               	movwf	4
+  1046  0086  3007               	movlw	7
+  1047  0087  0204               	subwf	4,w
+  1048  0088  1803               	skipnc
+  1049  0089  0008               	return
+  1050  008A  3002               	movlw	high S4396
+  1051  008B  008A               	movwf	10
+  1052  008C  3063               	movlw	low S4396
+  1053  008D  0704               	addwf	4,w
+  1054  008E  0082               	movwf	2
+  1055  008F  0008               	return
+  1056  0090                     __end_of_Deal_Key:	
+  1057                           
+  1058                           	psect	swtext2
+  1059  0263                     __pswtext2:	
+  1060  0263                     S4396:	
+  1061  0263  2854               	ljmp	l4232
+  1062  0264  285A               	ljmp	l4236
+  1063  0265  2861               	ljmp	l4238
+  1064  0266  2868               	ljmp	l4240
+  1065  0267  286F               	ljmp	l4242
+  1066  0268  2876               	ljmp	l4244
+  1067  0269  287D               	ljmp	l4246
+  1068                           
+  1069                           	psect	text470
+  1070  026A                     __ptext470:	
+  1071 ;; =============== function _Deal_Key ends ============
+  1072                           
+  1073                           
+  1074 ;; *************** function _system_initial *****************
+  1075 ;; Defined at:
+  1076 ;;		line 167 in file "D:\Electric Torch\Project\Code\System.c"
+  1077 ;; Parameters:    Size  Location     Type
+  1078 ;;		None
+  1079 ;; Auto vars:     Size  Location     Type
+  1080 ;;		None
+  1081 ;; Return value:  Size  Location     Type
+  1082 ;;		None               void
+  1083 ;; Registers used:
+  1084 ;;		wreg, status,2, status,0, pclath, cstack
+  1085 ;; Tracked objects:
+  1086 ;;		On entry : 17F/0
+  1087 ;;		On exit  : 17F/20
+  1088 ;;		Unchanged: FFE80/0
+  1089 ;; Data sizes:     COMMON   BANK0   BANK1
+  1090 ;;      Params:         0       0       0
+  1091 ;;      Locals:         0       0       0
+  1092 ;;      Temps:          0       0       0
+  1093 ;;      Totals:         0       0       0
+  1094 ;;Total ram usage:        0 bytes
+  1095 ;; Hardware stack levels used:    1
+  1096 ;; Hardware stack levels required when called:    7
+  1097 ;; This function calls:
+  1098 ;;		_initial_osccon
+  1099 ;;		_initial_port
+  1100 ;;		_initial_timer0
+  1101 ;;		_initial_ccp1_pwm
+  1102 ;; This function is called by:
+  1103 ;;		_main
+  1104 ;; This function uses a non-reentrant model
+  1105 ;;
+  1106  026A                     _system_initial:	
+  1107                           
+  1108                           ;System.c: 172: initial_osccon();
+  1109                           
+  1110                           ; Regs used in _system_initial: [wreg+status,2+status,0+pclath+cstack]
+  1111  026A  2280               	fcall	_initial_osccon
+  1112                           
+  1113                           ;System.c: 178: initial_port();
+  1114  026B  21D8               	fcall	_initial_port
+  1115                           
+  1116                           ;System.c: 180: initial_timer0() ;
+  1117  026C  222F               	fcall	_initial_timer0
+  1118                           
+  1119                           ;System.c: 182: initial_ccp1_pwm();
+  1120  026D  21FA               	fcall	_initial_ccp1_pwm
+  1121                           
+  1122                           ;System.c: 193: ((GIE = 1));
+  1123  026E  178B               	bsf	11,7
+  1124  026F  0008               	return
+  1125  0270                     __end_of_system_initial:	
+  1126                           
+  1127                           	psect	text471
+  1128  01AE                     __ptext471:	
+  1129 ;; =============== function _system_initial ends ============
+  1130                           
+  1131                           
+  1132 ;; *************** function _Bright_GradualChange *****************
+  1133 ;; Defined at:
+  1134 ;;		line 158 in file "D:\Electric Torch\Project\Code\MyProject.c"
+  1135 ;; Parameters:    Size  Location     Type
+  1136 ;;		None
+  1137 ;; Auto vars:     Size  Location     Type
+  1138 ;;		None
+  1139 ;; Return value:  Size  Location     Type
+  1140 ;;		None               void
+  1141 ;; Registers used:
+  1142 ;;		wreg, status,2, status,0, pclath, cstack
+  1143 ;; Tracked objects:
+  1144 ;;		On entry : 20/0
+  1145 ;;		On exit  : 20/0
+  1146 ;;		Unchanged: FFFDF/0
+  1147 ;; Data sizes:     COMMON   BANK0   BANK1
+  1148 ;;      Params:         0       0       0
+  1149 ;;      Locals:         0       0       0
+  1150 ;;      Temps:          0       0       0
+  1151 ;;      Totals:         0       0       0
+  1152 ;;Total ram usage:        0 bytes
+  1153 ;; Hardware stack levels used:    1
+  1154 ;; Hardware stack levels required when called:    6
+  1155 ;; This function calls:
+  1156 ;;		_set_dutyCycle_ccp1_pwm
+  1157 ;; This function is called by:
+  1158 ;;		_Deal_Key
+  1159 ;;		_Deal_WorkState
+  1160 ;; This function uses a non-reentrant model
+  1161 ;;
+  1162  01AE                     _Bright_GradualChange:	
+  1163  01AE                     l4160:	
+  1164                           ; Regs used in _Bright_GradualChange: [wreg+status,2+status,0+pclath+cstack]
+  1165                           
+  1166  01AE  3004               	movlw	4
+  1167                           
+  1168                           ;MyProject.c: 159: ChangeCnt ++;
+  1169  01AF  0AB6               	incf	_ChangeCnt,f
+  1170                           
+  1171                           ;MyProject.c: 160: if(ChangeCnt >= (4))
+  1172  01B0  0236               	subwf	_ChangeCnt,w
+  1173  01B1  1C03               	skipc
+  1174  01B2  0008               	return
+  1175                           
+  1176                           ;MyProject.c: 161: {
+  1177                           ;MyProject.c: 162: ChangeCnt = 0;
+  1178  01B3  01B6               	clrf	_ChangeCnt
+  1179                           
+  1180                           ;MyProject.c: 164: if(WorkFlagBits.b.f0)
+  1181  01B4  1C34               	btfss	_WorkFlagBits,0
+  1182  01B5  29BA               	goto	l4172
+  1183                           
+  1184                           ;MyProject.c: 165: {
+  1185                           ;MyProject.c: 166: DutyCycleValue --;
+  1186  01B6  0BC8               	decfsz	_DutyCycleValue,f
+  1187                           
+  1188                           ;MyProject.c: 167: if(DutyCycleValue == 0)
+  1189  01B7  29BF               	goto	l4178
+  1190                           
+  1191                           ;MyProject.c: 168: {
+  1192                           ;MyProject.c: 169: WorkFlagBits.b.f0 = 0;
+  1193  01B8  1034               	bcf	_WorkFlagBits,0
+  1194  01B9  29BF               	goto	l4178
+  1195  01BA                     l4172:	
+  1196  01BA  3064               	movlw	100
+  1197                           
+  1198                           ;MyProject.c: 172: else
+  1199                           ;MyProject.c: 173: {
+  1200                           ;MyProject.c: 174: DutyCycleValue ++;
+  1201  01BB  0AC8               	incf	_DutyCycleValue,f
+  1202                           
+  1203                           ;MyProject.c: 175: if(DutyCycleValue >= 100)
+  1204  01BC  0248               	subwf	_DutyCycleValue,w
+  1205  01BD  1803               	btfsc	3,0
+  1206                           
+  1207                           ;MyProject.c: 176: {
+  1208                           ;MyProject.c: 177: WorkFlagBits.b.f0 = 1;
+  1209  01BE  1434               	bsf	_WorkFlagBits,0
+  1210  01BF                     l4178:	
+  1211                           
+  1212                           ;MyProject.c: 178: }
+  1213                           ;MyProject.c: 179: }
+  1214                           ;MyProject.c: 181: set_dutyCycle_ccp1_pwm(DutyCycleValue);
+  1215  01BF  0848               	movf	_DutyCycleValue,w
+  1216  01C0  00C0               	movwf	?_set_dutyCycle_ccp1_pwm
+  1217  01C1  01C1               	clrf	?_set_dutyCycle_ccp1_pwm+1
+  1218  01C2  2901               	ljmp	l4138
+  1219  01C3                     __end_of_Bright_GradualChange:	
+  1220                           
+  1221                           	psect	text472
+  1222  01FA                     __ptext472:	
+  1223 ;; =============== function _Bright_GradualChange ends ============
+  1224                           
+  1225                           
+  1226 ;; *************** function _initial_ccp1_pwm *****************
+  1227 ;; Defined at:
+  1228 ;;		line 125 in file "D:\Electric Torch\Project\Code\MyProject.c"
+  1229 ;; Parameters:    Size  Location     Type
+  1230 ;;		None
+  1231 ;; Auto vars:     Size  Location     Type
+  1232 ;;		None
+  1233 ;; Return value:  Size  Location     Type
+  1234 ;;		None               void
+  1235 ;; Registers used:
+  1236 ;;		wreg, status,2, status,0, pclath, cstack
+  1237 ;; Tracked objects:
+  1238 ;;		On entry : 17F/0
+  1239 ;;		On exit  : 17F/20
+  1240 ;;		Unchanged: FFE80/0
+  1241 ;; Data sizes:     COMMON   BANK0   BANK1
+  1242 ;;      Params:         0       0       0
+  1243 ;;      Locals:         0       0       0
+  1244 ;;      Temps:          0       0       0
+  1245 ;;      Totals:         0       0       0
+  1246 ;;Total ram usage:        0 bytes
+  1247 ;; Hardware stack levels used:    1
+  1248 ;; Hardware stack levels required when called:    6
+  1249 ;; This function calls:
+  1250 ;;		_set_dutyCycle_ccp1_pwm
+  1251 ;;		_open_ccp1_pwm
+  1252 ;; This function is called by:
+  1253 ;;		_system_initial
+  1254 ;; This function uses a non-reentrant model
+  1255 ;;
+  1256  01FA                     _initial_ccp1_pwm:	
+  1257                           
+  1258                           ;MyProject.c: 131: CCP1CON = 0x0C;
+  1259                           
+  1260                           ; Regs used in _initial_ccp1_pwm: [wreg+status,2+status,0+pclath+cstack]
+  1261  01FA  300C               	movlw	12
+  1262  01FB  0095               	movwf	21	;volatile
+  1263                           
+  1264                           ;MyProject.c: 133: DutyCycleValue = 0;
+  1265  01FC  01C8               	clrf	_DutyCycleValue
+  1266                           
+  1267                           ;MyProject.c: 134: set_dutyCycle_ccp1_pwm(DutyCycleValue);
+  1268  01FD  0848               	movf	_DutyCycleValue,w
+  1269  01FE  00C0               	movwf	?_set_dutyCycle_ccp1_pwm
+  1270  01FF  01C1               	clrf	?_set_dutyCycle_ccp1_pwm+1
+  1271  0200  2101               	fcall	_set_dutyCycle_ccp1_pwm
+  1272                           
+  1273                           ;MyProject.c: 136: PR2 = 249;
+  1274  0201  30F9               	movlw	249
+  1275  0202  1683               	bsf	3,5	;RP0=1, select bank1
+  1276  0203  0092               	movwf	18	;volatile
+  1277                           
+  1278                           ;MyProject.c: 141: T2CON = 0x07;
+  1279  0204  3007               	movlw	7
+  1280  0205  1283               	bcf	3,5	;RP0=0, select bank0
+  1281  0206  0092               	movwf	18	;volatile
+  1282                           
+  1283                           ;MyProject.c: 144: open_ccp1_pwm();
+  1284  0207  2A7A               	ljmp	l3958
+  1285  0208                     __end_of_initial_ccp1_pwm:	
+  1286                           
+  1287                           	psect	text473
+  1288  0101                     __ptext473:	
+  1289 ;; =============== function _initial_ccp1_pwm ends ============
+  1290                           
+  1291                           
+  1292 ;; *************** function _set_dutyCycle_ccp1_pwm *****************
+  1293 ;; Defined at:
+  1294 ;;		line 65 in file "D:\Electric Torch\Project\Code\MyProject.c"
+  1295 ;; Parameters:    Size  Location     Type
+  1296 ;;  dutyCycle       2    6[BANK0 ] unsigned int 
+  1297 ;; Auto vars:     Size  Location     Type
+  1298 ;;  pwm_Value       2   10[BANK0 ] unsigned int 
+  1299 ;; Return value:  Size  Location     Type
+  1300 ;;		None               void
+  1301 ;; Registers used:
+  1302 ;;		wreg, status,2, status,0, pclath, cstack
+  1303 ;; Tracked objects:
+  1304 ;;		On entry : 20/0
+  1305 ;;		On exit  : 20/0
+  1306 ;;		Unchanged: FFFDF/0
+  1307 ;; Data sizes:     COMMON   BANK0   BANK1
+  1308 ;;      Params:         0       2       0
+  1309 ;;      Locals:         0       2       0
+  1310 ;;      Temps:          0       2       0
+  1311 ;;      Totals:         0       6       0
+  1312 ;;Total ram usage:        6 bytes
+  1313 ;; Hardware stack levels used:    1
+  1314 ;; Hardware stack levels required when called:    5
+  1315 ;; This function calls:
+  1316 ;;		___wmul
+  1317 ;; This function is called by:
+  1318 ;;		_initial_ccp1_pwm
+  1319 ;;		_Bright_GradualChange
+  1320 ;;		_Deal_WorkState
+  1321 ;; This function uses a non-reentrant model
+  1322 ;;
+  1323  0101                     _set_dutyCycle_ccp1_pwm:	
+  1324  0101                     l4138:	
+  1325                           ; Regs used in _set_dutyCycle_ccp1_pwm: [wreg+status,2+status,0+pclath+cstack]
+  1326                           
+  1327                           
+  1328                           ;MyProject.c: 66: unsigned int pwm_Value;
+  1329                           ;MyProject.c: 69: pwm_Value = dutyCycle * 10;
+  1330  0101  0841               	movf	set_dutyCycle_ccp1_pwm@dutyCycle+1,w
+  1331  0102  00BB               	movwf	?___wmul+1
+  1332  0103  0840               	movf	set_dutyCycle_ccp1_pwm@dutyCycle,w
+  1333  0104  00BA               	movwf	?___wmul
+  1334  0105  300A               	movlw	10
+  1335  0106  00BC               	movwf	?___wmul+2
+  1336  0107  01BD               	clrf	?___wmul+3
+  1337  0108  2164               	fcall	___wmul
+  1338  0109  083B               	movf	?___wmul+1,w
+  1339  010A  00C5               	movwf	set_dutyCycle_ccp1_pwm@pwm_Value+1
+  1340  010B  083A               	movf	?___wmul,w
+  1341  010C  00C4               	movwf	set_dutyCycle_ccp1_pwm@pwm_Value
+  1342                           
+  1343                           ;MyProject.c: 72: CCPR1L = pwm_Value /4;
+  1344  010D  0845               	movf	set_dutyCycle_ccp1_pwm@pwm_Value+1,w
+  1345  010E  00C3               	movwf	??_set_dutyCycle_ccp1_pwm+1
+  1346  010F  0844               	movf	set_dutyCycle_ccp1_pwm@pwm_Value,w
+  1347  0110  00C2               	movwf	??_set_dutyCycle_ccp1_pwm
+  1348  0111  1003               	clrc
+  1349  0112  0CC3               	rrf	??_set_dutyCycle_ccp1_pwm+1,f
+  1350  0113  0CC2               	rrf	??_set_dutyCycle_ccp1_pwm,f
+  1351  0114  1003               	clrc
+  1352  0115  0CC3               	rrf	??_set_dutyCycle_ccp1_pwm+1,f
+  1353  0116  0CC2               	rrf	??_set_dutyCycle_ccp1_pwm,f
+  1354  0117  0842               	movf	??_set_dutyCycle_ccp1_pwm,w
+  1355  0118  0093               	movwf	19	;volatile
+  1356                           
+  1357                           ;MyProject.c: 74: pwm_Value = pwm_Value % 4;
+  1358  0119  3003               	movlw	3
+  1359  011A  05C4               	andwf	set_dutyCycle_ccp1_pwm@pwm_Value,f
+  1360  011B  30F0               	movlw	240
+  1361  011C  01C5               	clrf	set_dutyCycle_ccp1_pwm@pwm_Value+1
+  1362  011D  0EC4               	swapf	set_dutyCycle_ccp1_pwm@pwm_Value,f
+  1363  011E  0EC5               	swapf	set_dutyCycle_ccp1_pwm@pwm_Value+1,f
+  1364  011F  05C5               	andwf	set_dutyCycle_ccp1_pwm@pwm_Value+1,f
+  1365  0120  0844               	movf	set_dutyCycle_ccp1_pwm@pwm_Value,w
+  1366  0121  390F               	andlw	15
+  1367  0122  04C5               	iorwf	set_dutyCycle_ccp1_pwm@pwm_Value+1,f
+  1368  0123  30F0               	movlw	240
+  1369  0124  05C4               	andwf	set_dutyCycle_ccp1_pwm@pwm_Value,f
+  1370                           
+  1371                           ;MyProject.c: 77: CCP1CON = pwm_Value + 0x0C;
+  1372  0125  0844               	movf	set_dutyCycle_ccp1_pwm@pwm_Value,w
+  1373  0126  3E0C               	addlw	12
+  1374  0127  0095               	movwf	21	;volatile
+  1375  0128  0008               	return
+  1376  0129                     __end_of_set_dutyCycle_ccp1_pwm:	
+  1377                           
+  1378                           	psect	text474
+  1379  0164                     __ptext474:	
+  1380 ;; =============== function _set_dutyCycle_ccp1_pwm ends ============
+  1381                           
+  1382                           
+  1383 ;; *************** function ___wmul *****************
+  1384 ;; Defined at:
+  1385 ;;		line 3 in file "C:\Program Files\HI-TECH Software\PICC\9.82\sources\wmul.c"
+  1386 ;; Parameters:    Size  Location     Type
+  1387 ;;  multiplier      2    0[BANK0 ] unsigned int 
+  1388 ;;  multiplicand    2    2[BANK0 ] unsigned int 
+  1389 ;; Auto vars:     Size  Location     Type
+  1390 ;;  product         2    4[BANK0 ] unsigned int 
+  1391 ;; Return value:  Size  Location     Type
+  1392 ;;                  2    0[BANK0 ] unsigned int 
+  1393 ;; Registers used:
+  1394 ;;		wreg, status,2, status,0
+  1395 ;; Tracked objects:
+  1396 ;;		On entry : 20/0
+  1397 ;;		On exit  : 20/0
+  1398 ;;		Unchanged: FFFDF/0
+  1399 ;; Data sizes:     COMMON   BANK0   BANK1
+  1400 ;;      Params:         0       4       0
+  1401 ;;      Locals:         0       2       0
+  1402 ;;      Temps:          0       0       0
+  1403 ;;      Totals:         0       6       0
+  1404 ;;Total ram usage:        6 bytes
+  1405 ;; Hardware stack levels used:    1
+  1406 ;; Hardware stack levels required when called:    4
+  1407 ;; This function calls:
+  1408 ;;		Nothing
+  1409 ;; This function is called by:
+  1410 ;;		_set_dutyCycle_ccp1_pwm
+  1411 ;; This function uses a non-reentrant model
+  1412 ;;
+  1413  0164                     ___wmul:	
+  1414                           
+  1415                           ; Regs used in ___wmul: [wreg+status,2+status,0]
+  1416  0164  01BE               	clrf	___wmul@product
+  1417  0165  01BF               	clrf	___wmul@product+1
+  1418  0166                     l4124:	
+  1419  0166  1C3A               	btfss	___wmul@multiplier,0
+  1420  0167  296E               	goto	l4128
+  1421  0168  083C               	movf	___wmul@multiplicand,w
+  1422  0169  07BE               	addwf	___wmul@product,f
+  1423  016A  1803               	skipnc
+  1424  016B  0ABF               	incf	___wmul@product+1,f
+  1425  016C  083D               	movf	___wmul@multiplicand+1,w
+  1426  016D  07BF               	addwf	___wmul@product+1,f
+  1427  016E                     l4128:	
+  1428  016E  1003               	clrc
+  1429  016F  0DBC               	rlf	___wmul@multiplicand,f
+  1430  0170  0DBD               	rlf	___wmul@multiplicand+1,f
+  1431  0171  1003               	clrc
+  1432  0172  0CBB               	rrf	___wmul@multiplier+1,f
+  1433  0173  0CBA               	rrf	___wmul@multiplier,f
+  1434  0174  083B               	movf	___wmul@multiplier+1,w
+  1435  0175  043A               	iorwf	___wmul@multiplier,w
+  1436  0176  1D03               	skipz
+  1437  0177  2966               	goto	l4124
+  1438  0178  083F               	movf	___wmul@product+1,w
+  1439  0179  00BB               	movwf	?___wmul+1
+  1440  017A  083E               	movf	___wmul@product,w
+  1441  017B  00BA               	movwf	?___wmul
+  1442  017C  0008               	return
+  1443  017D                     __end_of___wmul:	
+  1444                           
+  1445                           	psect	text475
+  1446  022F                     __ptext475:	
+  1447 ;; =============== function ___wmul ends ============
+  1448                           
+  1449                           
+  1450 ;; *************** function _initial_timer0 *****************
+  1451 ;; Defined at:
+  1452 ;;		line 137 in file "D:\Electric Torch\Project\Code\System.c"
+  1453 ;; Parameters:    Size  Location     Type
+  1454 ;;		None
+  1455 ;; Auto vars:     Size  Location     Type
+  1456 ;;		None
+  1457 ;; Return value:  Size  Location     Type
+  1458 ;;		None               void
+  1459 ;; Registers used:
+  1460 ;;		wreg
+  1461 ;; Tracked objects:
+  1462 ;;		On entry : 17F/20
+  1463 ;;		On exit  : 17F/0
+  1464 ;;		Unchanged: FFE80/0
+  1465 ;; Data sizes:     COMMON   BANK0   BANK1
+  1466 ;;      Params:         0       0       0
+  1467 ;;      Locals:         0       0       0
+  1468 ;;      Temps:          0       0       0
+  1469 ;;      Totals:         0       0       0
+  1470 ;;Total ram usage:        0 bytes
+  1471 ;; Hardware stack levels used:    1
+  1472 ;; Hardware stack levels required when called:    4
+  1473 ;; This function calls:
+  1474 ;;		Nothing
+  1475 ;; This function is called by:
+  1476 ;;		_system_initial
+  1477 ;; This function uses a non-reentrant model
+  1478 ;;
+  1479  022F                     _initial_timer0:	
+  1480  022F  30D0               	movlw	208
+  1481                           
+  1482                           ;System.c: 138: T0CS=0;
+  1483                           
+  1484                           ; Regs used in _initial_timer0: [wreg]
+  1485  0230  1281               	bcf	1,5
+  1486                           
+  1487                           ;System.c: 139: PSA=0;
+  1488  0231  1181               	bcf	1,3
+  1489                           
+  1490                           ;System.c: 141: PS2=1;
+  1491  0232  1501               	bsf	1,2
+  1492                           
+  1493                           ;System.c: 142: PS1=0;
+  1494  0233  1081               	bcf	1,1
+  1495                           
+  1496                           ;System.c: 143: PS0=0;
+  1497  0234  1001               	bcf	1,0
+  1498                           
+  1499                           ;System.c: 145: TMR0=0XD0;
+  1500  0235  1283               	bcf	3,5	;RP0=0, select bank0
+  1501  0236  0081               	movwf	1	;volatile
+  1502                           
+  1503                           ;System.c: 147: T0IF=0;
+  1504  0237  110B               	bcf	11,2
+  1505                           
+  1506                           ;System.c: 148: T0IE=1;
+  1507  0238  168B               	bsf	11,5
+  1508  0239  0008               	return
+  1509  023A                     __end_of_initial_timer0:	
+  1510                           
+  1511                           	psect	text476
+  1512  01D8                     __ptext476:	
+  1513 ;; =============== function _initial_timer0 ends ============
+  1514                           
+  1515                           
+  1516 ;; *************** function _initial_port *****************
+  1517 ;; Defined at:
+  1518 ;;		line 106 in file "D:\Electric Torch\Project\Code\System.c"
+  1519 ;; Parameters:    Size  Location     Type
+  1520 ;;		None
+  1521 ;; Auto vars:     Size  Location     Type
+  1522 ;;		None
+  1523 ;; Return value:  Size  Location     Type
+  1524 ;;		None               void
+  1525 ;; Registers used:
+  1526 ;;		wreg, status,2
+  1527 ;; Tracked objects:
+  1528 ;;		On entry : 17F/0
+  1529 ;;		On exit  : 17F/20
+  1530 ;;		Unchanged: FFE80/0
+  1531 ;; Data sizes:     COMMON   BANK0   BANK1
+  1532 ;;      Params:         0       0       0
+  1533 ;;      Locals:         0       0       0
+  1534 ;;      Temps:          0       0       0
+  1535 ;;      Totals:         0       0       0
+  1536 ;;Total ram usage:        0 bytes
+  1537 ;; Hardware stack levels used:    1
+  1538 ;; Hardware stack levels required when called:    4
+  1539 ;; This function calls:
+  1540 ;;		Nothing
+  1541 ;; This function is called by:
+  1542 ;;		_system_initial
+  1543 ;; This function uses a non-reentrant model
+  1544 ;;
+  1545  01D8                     _initial_port:	
+  1546                           
+  1547                           ;System.c: 107: ANSEL=0x00;
+  1548                           
+  1549                           ; Regs used in _initial_port: [wreg+status,2]
+  1550  01D8  1683               	bsf	3,5	;RP0=1, select bank1
+  1551  01D9  0191               	clrf	17	;volatile
+  1552                           
+  1553                           ;System.c: 108: TRISC=0xFF;
+  1554  01DA  30FF               	movlw	255
+  1555  01DB  0087               	movwf	7	;volatile
+  1556                           
+  1557                           ;System.c: 109: PORTC=0x00;
+  1558  01DC  1283               	bcf	3,5	;RP0=0, select bank0
+  1559  01DD  0187               	clrf	7	;volatile
+  1560                           
+  1561                           ;System.c: 110: TRISC0 = 0;
+  1562  01DE  1683               	bsf	3,5	;RP0=1, select bank1
+  1563  01DF  1007               	bcf	7,0
+  1564  01E0  1087               	bcf	7,1
+  1565                           
+  1566                           ;System.c: 113: TRISA = 0xFF;
+  1567  01E1  0085               	movwf	5	;volatile
+  1568                           
+  1569                           ;System.c: 114: PORTA = 0x00;
+  1570  01E2  1283               	bcf	3,5	;RP0=0, select bank0
+  1571  01E3  0185               	clrf	5	;volatile
+  1572                           
+  1573                           ;System.c: 116: WPUA2 = 1;
+  1574  01E4  1683               	bsf	3,5	;RP0=1, select bank1
+  1575  01E5  1515               	bsf	21,2
+  1576                           
+  1577                           ;System.c: 117: nRAPU = 0;
+  1578  01E6  1381               	bcf	1,7
+  1579                           
+  1580                           ;System.c: 119: IOCA2 = 1;
+  1581  01E7  1516               	bsf	22,2
+  1582                           
+  1583                           ;System.c: 120: RAIE = 1;
+  1584  01E8  158B               	bsf	11,3
+  1585  01E9  0008               	return
+  1586  01EA                     __end_of_initial_port:	
+  1587                           
+  1588                           	psect	text477
+  1589  0280                     __ptext477:	
+  1590 ;; =============== function _initial_port ends ============
+  1591                           
+  1592                           
+  1593 ;; *************** function _initial_osccon *****************
+  1594 ;; Defined at:
+  1595 ;;		line 100 in file "D:\Electric Torch\Project\Code\System.c"
+  1596 ;; Parameters:    Size  Location     Type
+  1597 ;;		None
+  1598 ;; Auto vars:     Size  Location     Type
+  1599 ;;		None
+  1600 ;; Return value:  Size  Location     Type
+  1601 ;;		None               void
+  1602 ;; Registers used:
+  1603 ;;		None
+  1604 ;; Tracked objects:
+  1605 ;;		On entry : 17F/0
+  1606 ;;		On exit  : 17F/0
+  1607 ;;		Unchanged: FFFFFE80/0
+  1608 ;; Data sizes:     COMMON   BANK0   BANK1
+  1609 ;;      Params:         0       0       0
+  1610 ;;      Locals:         0       0       0
+  1611 ;;      Temps:          0       0       0
+  1612 ;;      Totals:         0       0       0
+  1613 ;;Total ram usage:        0 bytes
+  1614 ;; Hardware stack levels used:    1
+  1615 ;; Hardware stack levels required when called:    4
+  1616 ;; This function calls:
+  1617 ;;		Nothing
+  1618 ;; This function is called by:
+  1619 ;;		_system_initial
+  1620 ;; This function uses a non-reentrant model
+  1621 ;;
+  1622  0280                     _initial_osccon:	
+  1623                           
+  1624                           ; Regs used in _initial_osccon: []
+  1625  0280  0008               	return
+  1626  0281                     __end_of_initial_osccon:	
+  1627                           
+  1628                           	psect	text478
+  1629  027A                     __ptext478:	
+  1630 ;; =============== function _initial_osccon ends ============
+  1631                           
+  1632                           
+  1633 ;; *************** function _open_ccp1_pwm *****************
+  1634 ;; Defined at:
+  1635 ;;		line 103 in file "D:\Electric Torch\Project\Code\MyProject.c"
+  1636 ;; Parameters:    Size  Location     Type
+  1637 ;;		None
+  1638 ;; Auto vars:     Size  Location     Type
+  1639 ;;		None
+  1640 ;; Return value:  Size  Location     Type
+  1641 ;;		None               void
+  1642 ;; Registers used:
+  1643 ;;		None
+  1644 ;; Tracked objects:
+  1645 ;;		On entry : 20/0
+  1646 ;;		On exit  : 20/20
+  1647 ;;		Unchanged: FFFDF/0
+  1648 ;; Data sizes:     COMMON   BANK0   BANK1
+  1649 ;;      Params:         0       0       0
+  1650 ;;      Locals:         0       0       0
+  1651 ;;      Temps:          0       0       0
+  1652 ;;      Totals:         0       0       0
+  1653 ;;Total ram usage:        0 bytes
+  1654 ;; Hardware stack levels used:    1
+  1655 ;; Hardware stack levels required when called:    4
+  1656 ;; This function calls:
+  1657 ;;		Nothing
+  1658 ;; This function is called by:
+  1659 ;;		_initial_ccp1_pwm
+  1660 ;;		_Deal_WorkState
+  1661 ;; This function uses a non-reentrant model
+  1662 ;;
+  1663  027A                     _open_ccp1_pwm:	
+  1664  027A                     l3958:	
+  1665                           ; Regs used in _open_ccp1_pwm: []
+  1666                           
+  1667                           
+  1668                           ;MyProject.c: 104: TRISC5 = 0;
+  1669  027A  1683               	bsf	3,5	;RP0=1, select bank1
+  1670  027B  1287               	bcf	7,5
+  1671  027C  0008               	return
+  1672  027D                     __end_of_open_ccp1_pwm:	
+  1673                           
+  1674                           	psect	text479
+  1675  027D                     __ptext479:	
+  1676 ;; =============== function _open_ccp1_pwm ends ============
+  1677                           
+  1678                           
+  1679 ;; *************** function _close_ccp1_pwm *****************
+  1680 ;; Defined at:
+  1681 ;;		line 90 in file "D:\Electric Torch\Project\Code\MyProject.c"
+  1682 ;; Parameters:    Size  Location     Type
+  1683 ;;		None
+  1684 ;; Auto vars:     Size  Location     Type
+  1685 ;;		None
+  1686 ;; Return value:  Size  Location     Type
+  1687 ;;		None               void
+  1688 ;; Registers used:
+  1689 ;;		None
+  1690 ;; Tracked objects:
+  1691 ;;		On entry : 20/0
+  1692 ;;		On exit  : 20/20
+  1693 ;;		Unchanged: FFFDF/0
+  1694 ;; Data sizes:     COMMON   BANK0   BANK1
+  1695 ;;      Params:         0       0       0
+  1696 ;;      Locals:         0       0       0
+  1697 ;;      Temps:          0       0       0
+  1698 ;;      Totals:         0       0       0
+  1699 ;;Total ram usage:        0 bytes
+  1700 ;; Hardware stack levels used:    1
+  1701 ;; Hardware stack levels required when called:    4
+  1702 ;; This function calls:
+  1703 ;;		Nothing
+  1704 ;; This function is called by:
+  1705 ;;		_Deal_WorkState
+  1706 ;; This function uses a non-reentrant model
+  1707 ;;
+  1708  027D                     _close_ccp1_pwm:	
+  1709  027D                     l3956:	
+  1710                           ; Regs used in _close_ccp1_pwm: []
+  1711                           
+  1712                           
+  1713                           ;MyProject.c: 91: TRISC5 = 1;
+  1714  027D  1683               	bsf	3,5	;RP0=1, select bank1
+  1715  027E  1687               	bsf	7,5
+  1716  027F  0008               	return
+  1717  0280                     __end_of_close_ccp1_pwm:	
+  1718                           
+  1719                           	psect	text480
+  1720  0270                     __ptext480:	
+  1721 ;; =============== function _close_ccp1_pwm ends ============
+  1722                           
+  1723                           
+  1724 ;; *************** function _System_GetLoopClockTick *****************
+  1725 ;; Defined at:
+  1726 ;;		line 324 in file "D:\Electric Torch\Project\Code\System.c"
+  1727 ;; Parameters:    Size  Location     Type
+  1728 ;;		None
+  1729 ;; Auto vars:     Size  Location     Type
+  1730 ;;		None
+  1731 ;; Return value:  Size  Location     Type
+  1732 ;;		None               void
+  1733 ;; Registers used:
+  1734 ;;		None
+  1735 ;; Tracked objects:
+  1736 ;;		On entry : 0/0
+  1737 ;;		On exit  : 20/0
+  1738 ;;		Unchanged: FFFDF/0
+  1739 ;; Data sizes:     COMMON   BANK0   BANK1
+  1740 ;;      Params:         0       0       0
+  1741 ;;      Locals:         0       0       0
+  1742 ;;      Temps:          0       0       0
+  1743 ;;      Totals:         0       0       0
+  1744 ;;Total ram usage:        0 bytes
+  1745 ;; Hardware stack levels used:    1
+  1746 ;; Hardware stack levels required when called:    4
+  1747 ;; This function calls:
+  1748 ;;		Nothing
+  1749 ;; This function is called by:
+  1750 ;;		_main
+  1751 ;; This function uses a non-reentrant model
+  1752 ;;
+  1753  0270                     _System_GetLoopClockTick:	
+  1754  0270                     l2979:	
+  1755                           ;System.c: 326: {
+  1756                           
+  1757                           ; Regs used in _System_GetLoopClockTick: []
+  1758                           
+  1759  0270  1283               	bcf	3,5	;RP0=0, select bank0
+  1760  0271  1EB2               	btfss	_TimeFlag1Bits,5
+  1761  0272  2A70               	goto	l2979
+  1762                           
+  1763                           ;System.c: 328: }
+  1764                           ;System.c: 330: TimeFlag1Bits.b.f5 = 0;
+  1765  0273  12B2               	bcf	_TimeFlag1Bits,5
+  1766  0274  0008               	return
+  1767  0275                     __end_of_System_GetLoopClockTick:	
+  1768                           
+  1769                           	psect	text481
+  1770  01C3                     __ptext481:	
+  1771 ;; =============== function _System_GetLoopClockTick ends ============
+  1772                           
+  1773                           
+  1774 ;; *************** function _INTS *****************
+  1775 ;; Defined at:
+  1776 ;;		line 124 in file "D:\Electric Torch\Project\Code\Main.c"
+  1777 ;; Parameters:    Size  Location     Type
+  1778 ;;		None
+  1779 ;; Auto vars:     Size  Location     Type
+  1780 ;;		None
+  1781 ;; Return value:  Size  Location     Type
+  1782 ;;		None               void
+  1783 ;; Registers used:
+  1784 ;;		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, btemp+1, pclath, cstack
+  1785 ;; Tracked objects:
+  1786 ;;		On entry : 0/0
+  1787 ;;		On exit  : 20/0
+  1788 ;;		Unchanged: FFFDF/0
+  1789 ;; Data sizes:     COMMON   BANK0   BANK1
+  1790 ;;      Params:         0       0       0
+  1791 ;;      Locals:         0       0       0
+  1792 ;;      Temps:          4       0       0
+  1793 ;;      Totals:         4       0       0
+  1794 ;;Total ram usage:        4 bytes
+  1795 ;; Hardware stack levels used:    1
+  1796 ;; Hardware stack levels required when called:    3
+  1797 ;; This function calls:
+  1798 ;;		_System_Clock
+  1799 ;; This function is called by:
+  1800 ;;		Interrupt level 1
+  1801 ;; This function uses a non-reentrant model
+  1802 ;;
+  1803  01C3                     _INTS:	
+  1804                           
+  1805                           ;Main.c: 125: if(T0IF == 1)
+  1806  01C3  1D0B               	btfss	11,2
+  1807  01C4  29CB               	goto	i1l3934
+  1808  01C5  30D0               	movlw	208
+  1809                           
+  1810                           ;Main.c: 126: {
+  1811                           ;Main.c: 127: T0IF = 0;
+  1812  01C6  110B               	bcf	11,2
+  1813                           
+  1814                           ;Main.c: 128: TMR0 = 0xD0;
+  1815  01C7  0081               	movwf	1	;volatile
+  1816                           
+  1817                           ;Main.c: 130: System_Clock();
+  1818  01C8  2253               	fcall	_System_Clock
+  1819                           
+  1820                           ;Main.c: 131: RC0 =!RC0;
+  1821  01C9  3001               	movlw	1
+  1822  01CA  0687               	xorwf	7,f
+  1823  01CB                     i1l3934:	
+  1824                           
+  1825                           ;Main.c: 132: }
+  1826                           ;Main.c: 135: if(RAIF == 1)
+  1827  01CB  180B               	btfsc	11,0
+  1828                           
+  1829                           ;Main.c: 136: {
+  1830                           ;Main.c: 137: RAIF = 0;
+  1831  01CC  100B               	bcf	11,0
+  1832  01CD  0877               	movf	??_INTS+3,w
+  1833  01CE  00FF               	movwf	127
+  1834  01CF  0876               	movf	??_INTS+2,w
+  1835  01D0  008A               	movwf	10
+  1836  01D1  0875               	movf	??_INTS+1,w
+  1837  01D2  0084               	movwf	4
+  1838  01D3  0E74               	swapf	??_INTS^(0+-128),w
+  1839  01D4  0083               	movwf	3
+  1840  01D5  0EFE               	swapf	126,f
+  1841  01D6  0E7E               	swapf	126,w
+  1842  01D7  0009               	retfie
+  1843  01D8                     __end_of_INTS:	
+  1844                           
+  1845                           	psect	intentry
+  1846  0004                     __pintentry:	
+  1847                           ; Regs used in _INTS: [allreg]
+  1848                           
+  1849  0004                     interrupt_function:	
+  1850  007E                     saved_w	set	btemp
+  1851  0004  00FE               	movwf	btemp
+  1852  0005  0E03               	swapf	3,w
+  1853  0006  00F4               	movwf	??_INTS
+  1854  0007  0804               	movf	4,w
+  1855  0008  00F5               	movwf	??_INTS+1
+  1856  0009  080A               	movf	10,w
+  1857  000A  00F6               	movwf	??_INTS+2
+  1858  000B  1283               	bcf	3,5	;RP0=0, select bank0
+  1859  000C  087F               	movf	btemp+1,w
+  1860  000D  00F7               	movwf	??_INTS+3
+  1861  000E  29C3               	ljmp	_INTS
+  1862                           
+  1863                           	psect	text482
+  1864  0253                     __ptext482:	
+  1865 ;; =============== function _INTS ends ============
+  1866                           
+  1867                           
+  1868 ;; *************** function _System_Clock *****************
+  1869 ;; Defined at:
+  1870 ;;		line 345 in file "D:\Electric Torch\Project\Code\System.c"
+  1871 ;; Parameters:    Size  Location     Type
+  1872 ;;		None
+  1873 ;; Auto vars:     Size  Location     Type
+  1874 ;;		None
+  1875 ;; Return value:  Size  Location     Type
+  1876 ;;		None               void
+  1877 ;; Registers used:
+  1878 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+  1879 ;; Tracked objects:
+  1880 ;;		On entry : 20/0
+  1881 ;;		On exit  : 20/0
+  1882 ;;		Unchanged: FFFDF/0
+  1883 ;; Data sizes:     COMMON   BANK0   BANK1
+  1884 ;;      Params:         0       0       0
+  1885 ;;      Locals:         0       0       0
+  1886 ;;      Temps:          0       0       0
+  1887 ;;      Totals:         0       0       0
+  1888 ;;Total ram usage:        0 bytes
+  1889 ;; Hardware stack levels used:    1
+  1890 ;; Hardware stack levels required when called:    2
+  1891 ;; This function calls:
+  1892 ;;		_System_Timing_Task
+  1893 ;;		_System_1ms_Task
+  1894 ;;		_System_10ms_Task
+  1895 ;;		_System_100ms_Task
+  1896 ;;		_System_250ms_Task
+  1897 ;;		_System_500ms_Task
+  1898 ;;		_System_1s_Task
+  1899 ;;		_Timing_In_Work
+  1900 ;; This function is called by:
+  1901 ;;		_INTS
+  1902 ;; This function uses a non-reentrant model
+  1903 ;;
+  1904  0253                     _System_Clock:	
+  1905                           
+  1906                           ;System.c: 350: System_Timing_Task();
+  1907                           
+  1908                           ; Regs used in _System_Clock: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+  1909  0253  2129               	fcall	_System_Timing_Task
+  1910                           
+  1911                           ;System.c: 353: System_1ms_Task();
+  1912  0254  2196               	fcall	_System_1ms_Task
+  1913                           
+  1914                           ;System.c: 355: System_10ms_Task();
+  1915  0255  223A               	fcall	_System_10ms_Task
+  1916                           
+  1917                           ;System.c: 357: System_100ms_Task();
+  1918  0256  225B               	fcall	_System_100ms_Task
+  1919                           
+  1920                           ;System.c: 359: System_250ms_Task();
+  1921  0257  217D               	fcall	_System_250ms_Task
+  1922                           
+  1923                           ;System.c: 361: System_500ms_Task();
+  1924  0258  2216               	fcall	_System_500ms_Task
+  1925                           
+  1926                           ;System.c: 363: System_1s_Task();
+  1927  0259  2208               	fcall	_System_1s_Task
+  1928                           
+  1929                           ;System.c: 366: Timing_In_Work();
+  1930  025A  2947               	ljmp	i1l4114
+  1931  025B                     __end_of_System_Clock:	
+  1932                           
+  1933                           	psect	text483
+  1934  0196                     __ptext483:	
+  1935 ;; =============== function _System_Clock ends ============
+  1936                           
+  1937                           
+  1938 ;; *************** function _System_1ms_Task *****************
+  1939 ;; Defined at:
+  1940 ;;		line 436 in file "D:\Electric Torch\Project\Code\System.c"
+  1941 ;; Parameters:    Size  Location     Type
+  1942 ;;		None
+  1943 ;; Auto vars:     Size  Location     Type
+  1944 ;;		None
+  1945 ;; Return value:  Size  Location     Type
+  1946 ;;		None               void
+  1947 ;; Registers used:
+  1948 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+  1949 ;; Tracked objects:
+  1950 ;;		On entry : 20/0
+  1951 ;;		On exit  : 20/0
+  1952 ;;		Unchanged: FFFDF/0
+  1953 ;; Data sizes:     COMMON   BANK0   BANK1
+  1954 ;;      Params:         0       0       0
+  1955 ;;      Locals:         0       0       0
+  1956 ;;      Temps:          0       0       0
+  1957 ;;      Totals:         0       0       0
+  1958 ;;Total ram usage:        0 bytes
+  1959 ;; Hardware stack levels used:    1
+  1960 ;; Hardware stack levels required when called:    1
+  1961 ;; This function calls:
+  1962 ;;		_Scan_Key
+  1963 ;; This function is called by:
+  1964 ;;		_System_Clock
+  1965 ;; This function uses a non-reentrant model
+  1966 ;;
+  1967  0196                     _System_1ms_Task:	
+  1968  0196  3006               	movlw	6
+  1969                           
+  1970                           ;System.c: 437: TimeFlag1Bits.b.f4 = 1;
+  1971                           
+  1972                           ; Regs used in _System_1ms_Task: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+  1973  0197  1632               	bsf	_TimeFlag1Bits,4
+  1974                           
+  1975                           ;System.c: 457: G_1ms_Case ++;
+  1976  0198  0AF9               	incf	_G_1ms_Case,f
+  1977                           
+  1978                           ;System.c: 459: if(G_1ms_Case >= 6)
+  1979  0199  0279               	subwf	_G_1ms_Case,w
+  1980  019A  1C03               	skipc
+  1981  019B  299E               	goto	i1l4062
+  1982                           
+  1983                           ;System.c: 460: {
+  1984                           ;System.c: 461: G_1ms_Case = 1;
+  1985  019C  01F9               	clrf	_G_1ms_Case
+  1986  019D  0AF9               	incf	_G_1ms_Case,f
+  1987  019E                     i1l4062:	
+  1988                           ;System.c: 484: break;
+  1989                           
+  1990  019E  0879               	movf	_G_1ms_Case,w
+  1991                           
+  1992                           ; Switch size 1, requested type "space"
+  1993                           ; Number of cases is 5, Range of values is 1 to 5
+  1994                           ; switch strategies available:
+  1995                           ; Name         Instructions Cycles
+  1996                           ; direct_byte           14     9 (fixed)
+  1997                           ; simple_byte           16     9 (average)
+  1998                           ; jumptable            263     9 (fixed)
+  1999                           ;	Chosen strategy is direct_byte
+  2000  019F  3EFF               	addlw	-1
+  2001  01A0  1C03               	skipc
+  2002  01A1  0008               	return
+  2003  01A2  0084               	movwf	4
+  2004  01A3  3005               	movlw	5
+  2005  01A4  0204               	subwf	4,w
+  2006  01A5  1803               	skipnc
+  2007  01A6  0008               	return
+  2008  01A7  3002               	movlw	high i1S4398
+  2009  01A8  008A               	movwf	10
+  2010  01A9  3075               	movlw	low i1S4398
+  2011  01AA  0704               	addwf	4,w
+  2012  01AB  0082               	movwf	2
+  2013  01AC                     i1l3006:	
+  2014  01AC  0008               	return
+  2015  01AD                     i1l4058:	
+  2016                           
+  2017                           ;System.c: 483: Scan_Key();
+  2018  01AD  2890               	ljmp	i1l3960
+  2019  01AE                     __end_of_System_1ms_Task:	
+  2020                           
+  2021                           	psect	swtext3
+  2022  0275                     __pswtext3:	
+  2023  0275                     i1S4398:	
+  2024  0275  29AC               	ljmp	i1l3006
+  2025  0276  29AD               	ljmp	i1l4058
+  2026  0277  29AC               	ljmp	i1l3006
+  2027  0278  29AC               	ljmp	i1l3006
+  2028  0279  29AC               	ljmp	i1l3006
+  2029                           
+  2030                           	psect	text484
+  2031  0147                     __ptext484:	
+  2032 ;; =============== function _System_1ms_Task ends ============
+  2033                           
+  2034                           
+  2035 ;; *************** function _Timing_In_Work *****************
+  2036 ;; Defined at:
+  2037 ;;		line 718 in file "D:\Electric Torch\Project\Code\System.c"
+  2038 ;; Parameters:    Size  Location     Type
+  2039 ;;		None
+  2040 ;; Auto vars:     Size  Location     Type
+  2041 ;;		None
+  2042 ;; Return value:  Size  Location     Type
+  2043 ;;		None               void
+  2044 ;; Registers used:
+  2045 ;;		wreg
+  2046 ;; Tracked objects:
+  2047 ;;		On entry : 20/0
+  2048 ;;		On exit  : 20/0
+  2049 ;;		Unchanged: FFFDF/0
+  2050 ;; Data sizes:     COMMON   BANK0   BANK1
+  2051 ;;      Params:         0       0       0
+  2052 ;;      Locals:         0       0       0
+  2053 ;;      Temps:          4       0       0
+  2054 ;;      Totals:         4       0       0
+  2055 ;;Total ram usage:        4 bytes
+  2056 ;; Hardware stack levels used:    1
+  2057 ;; This function calls:
+  2058 ;;		Nothing
+  2059 ;; This function is called by:
+  2060 ;;		_System_Clock
+  2061 ;; This function uses a non-reentrant model
+  2062 ;;
+  2063  0147                     _Timing_In_Work:	
+  2064  0147                     i1l4114:	
+  2065                           ; Regs used in _Timing_In_Work: [wreg]
+  2066                           
+  2067                           
+  2068                           ;System.c: 720: if(TimeFlag1Bits.b.f2)
+  2069  0147  1D32               	btfss	_TimeFlag1Bits,2
+  2070  0148  0008               	return
+  2071                           
+  2072                           ;System.c: 721: {
+  2073                           ;System.c: 723: if(G_Timing_InWork_Cnt == 0)
+  2074  0149  0827               	movf	_G_Timing_InWork_Cnt+3,w
+  2075  014A  0426               	iorwf	_G_Timing_InWork_Cnt+2,w
+  2076  014B  0425               	iorwf	_G_Timing_InWork_Cnt+1,w
+  2077  014C  0424               	iorwf	_G_Timing_InWork_Cnt,w
+  2078  014D  1D03               	skipz
+  2079  014E  2951               	goto	i1l4120
+  2080                           
+  2081                           ;System.c: 724: {
+  2082                           ;System.c: 725: TimeFlag1Bits.b.f2 = 0;
+  2083  014F  1132               	bcf	_TimeFlag1Bits,2
+  2084                           
+  2085                           ;System.c: 726: }
+  2086  0150  0008               	return
+  2087  0151                     i1l4120:	
+  2088                           
+  2089                           ;System.c: 727: else G_Timing_InWork_Cnt --;
+  2090  0151  3001               	movlw	1
+  2091  0152  00F0               	movwf	??_Timing_In_Work
+  2092  0153  01F1               	clrf	??_Timing_In_Work+1
+  2093  0154  01F2               	clrf	??_Timing_In_Work+2
+  2094  0155  01F3               	clrf	??_Timing_In_Work+3
+  2095  0156  02A4               	subwf	_G_Timing_InWork_Cnt,f
+  2096  0157  0871               	movf	??_Timing_In_Work+1,w
+  2097  0158  1C03               	skipc
+  2098  0159  0F71               	incfsz	??_Timing_In_Work+1,w
+  2099  015A  02A5               	subwf	_G_Timing_InWork_Cnt+1,f
+  2100  015B  0872               	movf	??_Timing_In_Work+2,w
+  2101  015C  1C03               	skipc
+  2102  015D  0F72               	incfsz	??_Timing_In_Work+2,w
+  2103  015E  02A6               	subwf	_G_Timing_InWork_Cnt+2,f
+  2104  015F  0873               	movf	??_Timing_In_Work+3,w
+  2105  0160  1C03               	skipc
+  2106  0161  0F73               	incfsz	??_Timing_In_Work+3,w
+  2107  0162  02A7               	subwf	_G_Timing_InWork_Cnt+3,f
+  2108  0163  0008               	return
+  2109  0164                     __end_of_Timing_In_Work:	
+  2110                           
+  2111                           	psect	text485
+  2112  0208                     __ptext485:	
+  2113 ;; =============== function _Timing_In_Work ends ============
+  2114                           
+  2115                           
+  2116 ;; *************** function _System_1s_Task *****************
+  2117 ;; Defined at:
+  2118 ;;		line 665 in file "D:\Electric Torch\Project\Code\System.c"
+  2119 ;; Parameters:    Size  Location     Type
+  2120 ;;		None
+  2121 ;; Auto vars:     Size  Location     Type
+  2122 ;;		None
+  2123 ;; Return value:  Size  Location     Type
+  2124 ;;		None               void
+  2125 ;; Registers used:
+  2126 ;;		wreg, status,2, status,0
+  2127 ;; Tracked objects:
+  2128 ;;		On entry : 20/0
+  2129 ;;		On exit  : 20/0
+  2130 ;;		Unchanged: FFFDF/0
+  2131 ;; Data sizes:     COMMON   BANK0   BANK1
+  2132 ;;      Params:         0       0       0
+  2133 ;;      Locals:         0       0       0
+  2134 ;;      Temps:          0       0       0
+  2135 ;;      Totals:         0       0       0
+  2136 ;;Total ram usage:        0 bytes
+  2137 ;; Hardware stack levels used:    1
+  2138 ;; This function calls:
+  2139 ;;		Nothing
+  2140 ;; This function is called by:
+  2141 ;;		_System_Clock
+  2142 ;; This function uses a non-reentrant model
+  2143 ;;
+  2144  0208                     _System_1s_Task:	
+  2145                           
+  2146                           ;System.c: 666: G_1sCnt++;
+  2147                           
+  2148                           ; Regs used in _System_1s_Task: [wreg+status,2+status,0]
+  2149  0208  0AA8               	incf	_G_1sCnt,f
+  2150  0209  1903               	skipnz
+  2151  020A  0AA9               	incf	_G_1sCnt+1,f
+  2152                           
+  2153                           ;System.c: 667: if(G_1sCnt >= 1000)
+  2154  020B  3003               	movlw	3
+  2155  020C  0229               	subwf	_G_1sCnt+1,w
+  2156  020D  30E8               	movlw	232
+  2157  020E  1903               	skipnz
+  2158  020F  0228               	subwf	_G_1sCnt,w
+  2159  0210  1C03               	skipc
+  2160  0211  0008               	return
+  2161                           
+  2162                           ;System.c: 668: {
+  2163                           ;System.c: 669: G_1sCnt = 0;
+  2164  0212  01A8               	clrf	_G_1sCnt
+  2165  0213  01A9               	clrf	_G_1sCnt+1
+  2166                           
+  2167                           ;System.c: 670: TimeFlag1Bits.b.f15 = 1;
+  2168  0214  17B3               	bsf	_TimeFlag1Bits+1,7
+  2169  0215  0008               	return
+  2170  0216                     __end_of_System_1s_Task:	
+  2171                           
+  2172                           	psect	text486
+  2173  0216                     __ptext486:	
+  2174 ;; =============== function _System_1s_Task ends ============
+  2175                           
+  2176                           
+  2177 ;; *************** function _System_500ms_Task *****************
+  2178 ;; Defined at:
+  2179 ;;		line 639 in file "D:\Electric Torch\Project\Code\System.c"
+  2180 ;; Parameters:    Size  Location     Type
+  2181 ;;		None
+  2182 ;; Auto vars:     Size  Location     Type
+  2183 ;;		None
+  2184 ;; Return value:  Size  Location     Type
+  2185 ;;		None               void
+  2186 ;; Registers used:
+  2187 ;;		wreg, status,2, status,0
+  2188 ;; Tracked objects:
+  2189 ;;		On entry : 20/0
+  2190 ;;		On exit  : 20/0
+  2191 ;;		Unchanged: FFFDF/0
+  2192 ;; Data sizes:     COMMON   BANK0   BANK1
+  2193 ;;      Params:         0       0       0
+  2194 ;;      Locals:         0       0       0
+  2195 ;;      Temps:          0       0       0
+  2196 ;;      Totals:         0       0       0
+  2197 ;;Total ram usage:        0 bytes
+  2198 ;; Hardware stack levels used:    1
+  2199 ;; This function calls:
+  2200 ;;		Nothing
+  2201 ;; This function is called by:
+  2202 ;;		_System_Clock
+  2203 ;; This function uses a non-reentrant model
+  2204 ;;
+  2205  0216                     _System_500ms_Task:	
+  2206                           
+  2207                           ;System.c: 640: G_500msCnt++;
+  2208                           
+  2209                           ; Regs used in _System_500ms_Task: [wreg+status,2+status,0]
+  2210  0216  0AAC               	incf	_G_500msCnt,f
+  2211  0217  1903               	skipnz
+  2212  0218  0AAD               	incf	_G_500msCnt+1,f
+  2213                           
+  2214                           ;System.c: 641: if(G_500msCnt >= 500)
+  2215  0219  3001               	movlw	1
+  2216  021A  022D               	subwf	_G_500msCnt+1,w
+  2217  021B  30F4               	movlw	244
+  2218  021C  1903               	skipnz
+  2219  021D  022C               	subwf	_G_500msCnt,w
+  2220  021E  1C03               	skipc
+  2221  021F  0008               	return
+  2222                           
+  2223                           ;System.c: 642: {
+  2224                           ;System.c: 643: G_500msCnt = 0;
+  2225  0220  01AC               	clrf	_G_500msCnt
+  2226  0221  01AD               	clrf	_G_500msCnt+1
+  2227                           
+  2228                           ;System.c: 644: TimeFlag1Bits.b.f12 = 1;
+  2229  0222  1633               	bsf	_TimeFlag1Bits+1,4
+  2230  0223  0008               	return
+  2231  0224                     __end_of_System_500ms_Task:	
+  2232                           
+  2233                           	psect	text487
+  2234  017D                     __ptext487:	
+  2235 ;; =============== function _System_500ms_Task ends ============
+  2236                           
+  2237                           
+  2238 ;; *************** function _System_250ms_Task *****************
+  2239 ;; Defined at:
+  2240 ;;		line 611 in file "D:\Electric Torch\Project\Code\System.c"
+  2241 ;; Parameters:    Size  Location     Type
+  2242 ;;		None
+  2243 ;; Auto vars:     Size  Location     Type
+  2244 ;;		None
+  2245 ;; Return value:  Size  Location     Type
+  2246 ;;		None               void
+  2247 ;; Registers used:
+  2248 ;;		wreg, status,2, status,0
+  2249 ;; Tracked objects:
+  2250 ;;		On entry : 20/0
+  2251 ;;		On exit  : 20/0
+  2252 ;;		Unchanged: FFFDF/0
+  2253 ;; Data sizes:     COMMON   BANK0   BANK1
+  2254 ;;      Params:         0       0       0
+  2255 ;;      Locals:         0       0       0
+  2256 ;;      Temps:          1       0       0
+  2257 ;;      Totals:         1       0       0
+  2258 ;;Total ram usage:        1 bytes
+  2259 ;; Hardware stack levels used:    1
+  2260 ;; This function calls:
+  2261 ;;		Nothing
+  2262 ;; This function is called by:
+  2263 ;;		_System_Clock
+  2264 ;; This function uses a non-reentrant model
+  2265 ;;
+  2266  017D                     _System_250ms_Task:	
+  2267                           
+  2268                           ;System.c: 612: G_250msCnt++;
+  2269                           
+  2270                           ; Regs used in _System_250ms_Task: [wreg+status,2+status,0]
+  2271  017D  0AAA               	incf	_G_250msCnt,f
+  2272  017E  1903               	skipnz
+  2273  017F  0AAB               	incf	_G_250msCnt+1,f
+  2274                           
+  2275                           ;System.c: 613: if(G_250msCnt >= 250)
+  2276  0180  3000               	movlw	0
+  2277  0181  022B               	subwf	_G_250msCnt+1,w
+  2278  0182  30FA               	movlw	250
+  2279  0183  1903               	skipnz
+  2280  0184  022A               	subwf	_G_250msCnt,w
+  2281  0185  1C03               	skipc
+  2282  0186  0008               	return
+  2283  0187  3000               	movlw	0
+  2284                           
+  2285                           ;System.c: 614: {
+  2286                           ;System.c: 615: G_250msCnt = 0;
+  2287  0188  01AA               	clrf	_G_250msCnt
+  2288  0189  01AB               	clrf	_G_250msCnt+1
+  2289                           
+  2290                           ;System.c: 616: TimeFlag1Bits.b.f8 = 1;
+  2291  018A  1433               	bsf	_TimeFlag1Bits+1,0
+  2292                           
+  2293                           ;System.c: 618: TimeFlag1Bits.b.f9 = !TimeFlag1Bits.b.f9;
+  2294  018B  1CB3               	btfss	_TimeFlag1Bits+1,1
+  2295  018C  3001               	movlw	1
+  2296  018D  00F0               	movwf	??_System_250ms_Task
+  2297  018E  0DF0               	rlf	??_System_250ms_Task,f
+  2298  018F  0833               	movf	_TimeFlag1Bits+1,w
+  2299  0190  0670               	xorwf	??_System_250ms_Task,w
+  2300  0191  39FD               	andlw	-3
+  2301  0192  0670               	xorwf	??_System_250ms_Task,w
+  2302  0193  00B3               	movwf	_TimeFlag1Bits+1
+  2303                           
+  2304                           ;System.c: 620: TimeFlag1Bits.b.f10 = 1;
+  2305  0194  1533               	bsf	_TimeFlag1Bits+1,2
+  2306  0195  0008               	return
+  2307  0196                     __end_of_System_250ms_Task:	
+  2308                           
+  2309                           	psect	text488
+  2310  025B                     __ptext488:	
+  2311 ;; =============== function _System_250ms_Task ends ============
+  2312                           
+  2313                           
+  2314 ;; *************** function _System_100ms_Task *****************
+  2315 ;; Defined at:
+  2316 ;;		line 583 in file "D:\Electric Torch\Project\Code\System.c"
+  2317 ;; Parameters:    Size  Location     Type
+  2318 ;;		None
+  2319 ;; Auto vars:     Size  Location     Type
+  2320 ;;		None
+  2321 ;; Return value:  Size  Location     Type
+  2322 ;;		None               void
+  2323 ;; Registers used:
+  2324 ;;		wreg, status,2, status,0
+  2325 ;; Tracked objects:
+  2326 ;;		On entry : 20/0
+  2327 ;;		On exit  : 20/0
+  2328 ;;		Unchanged: FFFDF/0
+  2329 ;; Data sizes:     COMMON   BANK0   BANK1
+  2330 ;;      Params:         0       0       0
+  2331 ;;      Locals:         0       0       0
+  2332 ;;      Temps:          0       0       0
+  2333 ;;      Totals:         0       0       0
+  2334 ;;Total ram usage:        0 bytes
+  2335 ;; Hardware stack levels used:    1
+  2336 ;; This function calls:
+  2337 ;;		Nothing
+  2338 ;; This function is called by:
+  2339 ;;		_System_Clock
+  2340 ;; This function uses a non-reentrant model
+  2341 ;;
+  2342  025B                     _System_100ms_Task:	
+  2343  025B  3064               	movlw	100
+  2344                           
+  2345                           ;System.c: 584: G_100msCnt++;
+  2346                           
+  2347                           ; Regs used in _System_100ms_Task: [wreg+status,2+status,0]
+  2348  025C  0AB7               	incf	_G_100msCnt,f
+  2349                           
+  2350                           ;System.c: 585: if(G_100msCnt >= 100)
+  2351  025D  0237               	subwf	_G_100msCnt,w
+  2352  025E  1C03               	skipc
+  2353  025F  0008               	return
+  2354                           
+  2355                           ;System.c: 586: {
+  2356                           ;System.c: 587: G_100msCnt = 0;
+  2357  0260  01B7               	clrf	_G_100msCnt
+  2358                           
+  2359                           ;System.c: 588: TimeFlag1Bits.b.f7 = 1;
+  2360  0261  17B2               	bsf	_TimeFlag1Bits,7
+  2361  0262  0008               	return
+  2362  0263                     __end_of_System_100ms_Task:	
+  2363                           
+  2364                           	psect	text489
+  2365  023A                     __ptext489:	
+  2366 ;; =============== function _System_100ms_Task ends ============
+  2367                           
+  2368                           
+  2369 ;; *************** function _System_10ms_Task *****************
+  2370 ;; Defined at:
+  2371 ;;		line 543 in file "D:\Electric Torch\Project\Code\System.c"
+  2372 ;; Parameters:    Size  Location     Type
+  2373 ;;		None
+  2374 ;; Auto vars:     Size  Location     Type
+  2375 ;;		None
+  2376 ;; Return value:  Size  Location     Type
+  2377 ;;		None               void
+  2378 ;; Registers used:
+  2379 ;;		wreg, status,2, status,0
+  2380 ;; Tracked objects:
+  2381 ;;		On entry : 20/0
+  2382 ;;		On exit  : 20/0
+  2383 ;;		Unchanged: FFFDF/0
+  2384 ;; Data sizes:     COMMON   BANK0   BANK1
+  2385 ;;      Params:         0       0       0
+  2386 ;;      Locals:         0       0       0
+  2387 ;;      Temps:          0       0       0
+  2388 ;;      Totals:         0       0       0
+  2389 ;;Total ram usage:        0 bytes
+  2390 ;; Hardware stack levels used:    1
+  2391 ;; This function calls:
+  2392 ;;		Nothing
+  2393 ;; This function is called by:
+  2394 ;;		_System_Clock
+  2395 ;; This function uses a non-reentrant model
+  2396 ;;
+  2397  023A                     _System_10ms_Task:	
+  2398  023A  300A               	movlw	10
+  2399                           
+  2400                           ;System.c: 544: G_10msCnt++;
+  2401                           
+  2402                           ; Regs used in _System_10ms_Task: [wreg+status,2+status,0]
+  2403  023B  0AF8               	incf	_G_10msCnt,f
+  2404                           
+  2405                           ;System.c: 546: if(G_10msCnt >= 10)
+  2406  023C  0278               	subwf	_G_10msCnt,w
+  2407  023D  1C03               	skipc
+  2408  023E  0008               	return
+  2409                           
+  2410                           ;System.c: 547: {
+  2411                           ;System.c: 548: G_10msCnt = 0;
+  2412  023F  01F8               	clrf	_G_10msCnt
+  2413                           
+  2414                           ;System.c: 549: TimeFlag1Bits.b.f5 = 1;
+  2415  0240  16B2               	bsf	_TimeFlag1Bits,5
+  2416                           
+  2417                           ;System.c: 550: TimeFlag1Bits.b.f6 = 1;
+  2418  0241  1732               	bsf	_TimeFlag1Bits,6
+  2419  0242  0008               	return
+  2420  0243                     __end_of_System_10ms_Task:	
+  2421                           
+  2422                           	psect	text490
+  2423  0129                     __ptext490:	
+  2424 ;; =============== function _System_10ms_Task ends ============
+  2425                           
+  2426                           
+  2427 ;; *************** function _System_Timing_Task *****************
+  2428 ;; Defined at:
+  2429 ;;		line 382 in file "D:\Electric Torch\Project\Code\System.c"
+  2430 ;; Parameters:    Size  Location     Type
+  2431 ;;		None
+  2432 ;; Auto vars:     Size  Location     Type
+  2433 ;;		None
+  2434 ;; Return value:  Size  Location     Type
+  2435 ;;		None               void
+  2436 ;; Registers used:
+  2437 ;;		wreg
+  2438 ;; Tracked objects:
+  2439 ;;		On entry : 20/0
+  2440 ;;		On exit  : 20/0
+  2441 ;;		Unchanged: FFFDF/0
+  2442 ;; Data sizes:     COMMON   BANK0   BANK1
+  2443 ;;      Params:         0       0       0
+  2444 ;;      Locals:         0       0       0
+  2445 ;;      Temps:          4       0       0
+  2446 ;;      Totals:         4       0       0
+  2447 ;;Total ram usage:        4 bytes
+  2448 ;; Hardware stack levels used:    1
+  2449 ;; This function calls:
+  2450 ;;		Nothing
+  2451 ;; This function is called by:
+  2452 ;;		_System_Clock
+  2453 ;; This function uses a non-reentrant model
+  2454 ;;
+  2455  0129                     _System_Timing_Task:	
+  2456                           
+  2457                           ;System.c: 384: if((TimeFlag1Bits.b.f0)&&(!TimeFlag1Bits.b.f1))
+  2458                           
+  2459                           ; Regs used in _System_Timing_Task: [wreg]
+  2460  0129  1832               	btfsc	_TimeFlag1Bits,0
+  2461  012A  18B2               	btfsc	_TimeFlag1Bits,1
+  2462  012B  0008               	return
+  2463                           
+  2464                           ;System.c: 385: {
+  2465                           ;System.c: 387: if(G_TimingCnt == 0)
+  2466  012C  0823               	movf	_G_TimingCnt+3,w
+  2467  012D  0422               	iorwf	_G_TimingCnt+2,w
+  2468  012E  0421               	iorwf	_G_TimingCnt+1,w
+  2469  012F  0420               	iorwf	_G_TimingCnt,w
+  2470  0130  1D03               	skipz
+  2471  0131  2934               	goto	i1l4048
+  2472                           
+  2473                           ;System.c: 388: {
+  2474                           ;System.c: 389: TimeFlag1Bits.b.f0 = 0;
+  2475  0132  1032               	bcf	_TimeFlag1Bits,0
+  2476                           
+  2477                           ;System.c: 390: }
+  2478  0133  0008               	return
+  2479  0134                     i1l4048:	
+  2480                           
+  2481                           ;System.c: 391: else G_TimingCnt--;
+  2482  0134  3001               	movlw	1
+  2483  0135  00F0               	movwf	??_System_Timing_Task
+  2484  0136  01F1               	clrf	??_System_Timing_Task+1
+  2485  0137  01F2               	clrf	??_System_Timing_Task+2
+  2486  0138  01F3               	clrf	??_System_Timing_Task+3
+  2487  0139  02A0               	subwf	_G_TimingCnt,f
+  2488  013A  0871               	movf	??_System_Timing_Task+1,w
+  2489  013B  1C03               	skipc
+  2490  013C  0F71               	incfsz	??_System_Timing_Task+1,w
+  2491  013D  02A1               	subwf	_G_TimingCnt+1,f
+  2492  013E  0872               	movf	??_System_Timing_Task+2,w
+  2493  013F  1C03               	skipc
+  2494  0140  0F72               	incfsz	??_System_Timing_Task+2,w
+  2495  0141  02A2               	subwf	_G_TimingCnt+2,f
+  2496  0142  0873               	movf	??_System_Timing_Task+3,w
+  2497  0143  1C03               	skipc
+  2498  0144  0F73               	incfsz	??_System_Timing_Task+3,w
+  2499  0145  02A3               	subwf	_G_TimingCnt+3,f
+  2500  0146  0008               	return
+  2501  0147                     __end_of_System_Timing_Task:	
+  2502                           
+  2503                           	psect	text491
+  2504  0090                     __ptext491:	
+  2505 ;; =============== function _System_Timing_Task ends ============
+  2506                           
+  2507                           
+  2508 ;; *************** function _Scan_Key *****************
+  2509 ;; Defined at:
+  2510 ;;		line 75 in file "D:\Electric Torch\Project\Code\Key.c"
+  2511 ;; Parameters:    Size  Location     Type
+  2512 ;;		None
+  2513 ;; Auto vars:     Size  Location     Type
+  2514 ;;		None
+  2515 ;; Return value:  Size  Location     Type
+  2516 ;;		None               void
+  2517 ;; Registers used:
+  2518 ;;		wreg, status,2, status,0
+  2519 ;; Tracked objects:
+  2520 ;;		On entry : 20/0
+  2521 ;;		On exit  : 20/0
+  2522 ;;		Unchanged: FFFDF/0
+  2523 ;; Data sizes:     COMMON   BANK0   BANK1
+  2524 ;;      Params:         0       0       0
+  2525 ;;      Locals:         0       0       0
+  2526 ;;      Temps:          0       0       0
+  2527 ;;      Totals:         0       0       0
+  2528 ;;Total ram usage:        0 bytes
+  2529 ;; Hardware stack levels used:    1
+  2530 ;; This function calls:
+  2531 ;;		Nothing
+  2532 ;; This function is called by:
+  2533 ;;		_System_1ms_Task
+  2534 ;; This function uses a non-reentrant model
+  2535 ;;
+  2536  0090                     _Scan_Key:	
+  2537  0090                     i1l3960:	
+  2538                           ; Regs used in _Scan_Key: [wreg+status,2+status,0]
+  2539                           
+  2540                           
+  2541                           ;Key.c: 78: (TRISA2 = 1);
+  2542  0090  1683               	bsf	3,5	;RP0=1, select bank1
+  2543  0091  1505               	bsf	5,2
+  2544                           
+  2545                           ;Key.c: 80: pKeyResult = (PORTA);
+  2546  0092  1283               	bcf	3,5	;RP0=0, select bank0
+  2547  0093  0805               	movf	5,w	;volatile
+  2548  0094  00FD               	movwf	_pKeyResult
+  2549                           
+  2550                           ;Key.c: 82: pKeyResult = pKeyResult & (0x04);
+  2551  0095  3004               	movlw	4
+  2552  0096  05FD               	andwf	_pKeyResult,f
+  2553                           
+  2554                           ;Key.c: 84: if(pKeyResult != (0x04))
+  2555  0097  087D               	movf	_pKeyResult,w
+  2556  0098  3A04               	xorlw	4
+  2557  0099  1903               	skipnz
+  2558  009A  289E               	goto	i1l2332
+  2559                           
+  2560                           ;Key.c: 85: {
+  2561                           ;Key.c: 86: pKeyNullCnt = 0;
+  2562  009B  01FC               	clrf	_pKeyNullCnt
+  2563                           
+  2564                           ;Key.c: 88: KeyFlagBits.b.f1 = 1;
+  2565  009C  14AE               	bsf	_KeyFlagBits,1
+  2566                           
+  2567                           ;Key.c: 89: }
+  2568  009D  28AA               	goto	i1l3984
+  2569  009E                     i1l2332:	
+  2570  009E  3004               	movlw	4
+  2571                           
+  2572                           ;Key.c: 90: else
+  2573                           ;Key.c: 91: {
+  2574                           ;Key.c: 92: KeyFlagBits.b.f1 = 0;
+  2575  009F  10AE               	bcf	_KeyFlagBits,1
+  2576                           
+  2577                           ;Key.c: 94: pKeyNullCnt ++;
+  2578  00A0  0AFC               	incf	_pKeyNullCnt,f
+  2579                           
+  2580                           ;Key.c: 95: if(pKeyNullCnt >= (4))
+  2581  00A1  027C               	subwf	_pKeyNullCnt,w
+  2582  00A2  1C03               	skipc
+  2583  00A3  28A9               	goto	i1l2334
+  2584  00A4  30FF               	movlw	255
+  2585                           
+  2586                           ;Key.c: 96: {
+  2587                           ;Key.c: 97: pKeyNullCnt = 0;
+  2588  00A5  01FC               	clrf	_pKeyNullCnt
+  2589                           
+  2590                           ;Key.c: 98: KeyFlagBits.b.f3 = 1;
+  2591  00A6  15AE               	bsf	_KeyFlagBits,3
+  2592                           
+  2593                           ;Key.c: 100: KeyBuffer = (0xFF);
+  2594  00A7  00B8               	movwf	_KeyBuffer
+  2595                           
+  2596                           ;Key.c: 101: KeyValue = (0xFF);
+  2597  00A8  00B9               	movwf	_KeyValue
+  2598  00A9                     i1l2334:	
+  2599                           
+  2600                           ;Key.c: 102: }
+  2601                           ;Key.c: 104: pKeyCnt = 0;
+  2602  00A9  01FB               	clrf	_pKeyCnt
+  2603  00AA                     i1l3984:	
+  2604                           
+  2605                           ;Key.c: 105: }
+  2606                           ;Key.c: 107: if(pKeyResult == 0x00) KeyBuffer = 1;
+  2607  00AA  08FD               	movf	_pKeyResult,f
+  2608  00AB  1D03               	skipz
+  2609  00AC  28B0               	goto	i1l3988
+  2610  00AD  01B8               	clrf	_KeyBuffer
+  2611  00AE  0AB8               	incf	_KeyBuffer,f
+  2612  00AF  28B2               	goto	i1l3990
+  2613  00B0                     i1l3988:	
+  2614                           
+  2615                           ;Key.c: 121: else KeyBuffer = (0xFF);
+  2616  00B0  30FF               	movlw	255
+  2617  00B1  00B8               	movwf	_KeyBuffer
+  2618  00B2                     i1l3990:	
+  2619                           
+  2620                           ;Key.c: 124: if(KeyFlagBits.b.f1)
+  2621  00B2  1CAE               	btfss	_KeyFlagBits,1
+  2622  00B3  0008               	return
+  2623                           
+  2624                           ;Key.c: 125: {
+  2625                           ;Key.c: 126: if(KeyBuffer != pKeyBuffer1)
+  2626  00B4  0838               	movf	_KeyBuffer,w
+  2627  00B5  067A               	xorwf	_pKeyBuffer1,w
+  2628  00B6  1903               	skipnz
+  2629  00B7  28BC               	goto	i1l3998
+  2630                           
+  2631                           ;Key.c: 127: {
+  2632                           ;Key.c: 128: pKeyBuffer1 = KeyBuffer;
+  2633  00B8  0838               	movf	_KeyBuffer,w
+  2634  00B9  00FA               	movwf	_pKeyBuffer1
+  2635                           
+  2636                           ;Key.c: 129: pKeyCnt = 0;
+  2637  00BA  01FB               	clrf	_pKeyCnt
+  2638                           
+  2639                           ;Key.c: 130: }
+  2640  00BB  0008               	return
+  2641  00BC                     i1l3998:	
+  2642  00BC  3004               	movlw	4
+  2643                           
+  2644                           ;Key.c: 131: else
+  2645                           ;Key.c: 132: {
+  2646                           ;Key.c: 133: pKeyCnt ++;
+  2647  00BD  0AFB               	incf	_pKeyCnt,f
+  2648                           
+  2649                           ;Key.c: 134: if(pKeyCnt >= (4))
+  2650  00BE  027B               	subwf	_pKeyCnt,w
+  2651  00BF  1C03               	skipc
+  2652  00C0  0008               	return
+  2653                           
+  2654                           ;Key.c: 135: {
+  2655                           ;Key.c: 136: pKeyCnt = 0;
+  2656  00C1  01FB               	clrf	_pKeyCnt
+  2657                           
+  2658                           ;Key.c: 137: if(KeyFlagBits.b.f3)
+  2659  00C2  1DAE               	btfss	_KeyFlagBits,3
+  2660  00C3  0008               	return
+  2661                           
+  2662                           ;Key.c: 138: {
+  2663                           ;Key.c: 139: KeyValue = KeyBuffer;
+  2664  00C4  0838               	movf	_KeyBuffer,w
+  2665  00C5  00B9               	movwf	_KeyValue
+  2666                           
+  2667                           ;Key.c: 141: if(KeyValue != (0xFF))
+  2668  00C6  3AFF               	xorlw	255
+  2669  00C7  1903               	skipnz
+  2670  00C8  0008               	return
+  2671                           
+  2672                           ;Key.c: 142: {
+  2673                           ;Key.c: 143: KeyFlagBits.b.f2 = 1;
+  2674  00C9  152E               	bsf	_KeyFlagBits,2
+  2675                           
+  2676                           ;Key.c: 148: KeyFlagBits.b.f3 = 0;
+  2677  00CA  11AE               	bcf	_KeyFlagBits,3
+  2678                           
+  2679                           ;Key.c: 149: pKeyNullCnt = 0;
+  2680  00CB  01FC               	clrf	_pKeyNullCnt
+  2681  00CC  0008               	return
+  2682  00CD                     __end_of_Scan_Key:	
+  2683                           
+  2684                           	psect	text492
+  2685  0000                     __ptext492:	
+  2686 ;; =============== function _Scan_Key ends ============
+  2687                           
+  2688  007E                     btemp	set	126	;btemp
+  2689  007E                     wtemp0	set	126
+
+
+HI-TECH Software PICC Macro Assembler V9.82 build 9453 
+Symbol Table                                                                                   Fri Dec 27 20:36:26 2013
+
+                               pc 0002          __size_of_System_1ms_Task 0018                                fsr 0004  
+             ___wmul@multiplicand 003C                               _GIE 005F                               _RC0 0038  
+                             _RC1 0039                               _PS0 0408                               _PR2 0092  
+                             _PS1 0409                               _PS2 040A                               _PSA 040B  
+                     _G_TimingCnt 0020                               fsr0 0004                               indf 0000  
+                            S4394 024B                              S4396 0263                  ??_initial_osccon 003A  
+                ??_initial_timer0 003A                      _WorkFlagBits 0034                              l1200 0100  
+                            l1152 0000                              l1146 0000                              l1155 0000  
+                            l1149 0000                              l1169 003C                              l4020 0000  
+                            l4012 0000                              l4030 0000                              l4022 0000  
+                            l4014 0000                              l3047 0000                              l4024 0000  
+                            l4016 0000                              l4032 0000                              l4026 0000  
+                            l4018 0000                              l4034 0000                              l4130 0000  
+                            l4122 0000                              l4210 0000                              l4028 0000  
+                            l4036 0000                              l4132 0000                              l4124 0166  
+                            l4140 0000                              l4220 0046                              l4212 0000  
+                            l4204 002A                              l4038 0000                              l4142 0000  
+                            l4150 0000                              l4214 0000                              l4128 016E  
+                            l4144 0000                              l4152 0000                              l4160 01AE  
+                            l4240 0068                              l4232 0054                              l4304 00F4  
+                            l4320 0000                              l4146 0000                              l4138 0101  
+                            l4154 0000                              l4170 0000                              l4162 0000  
+                            l4242 006F                              l4234 0000                              l4250 0084  
+                            l4226 0000                              l4218 0044                              l4330 0000  
+                            l4322 0000                              l4156 0000                              l4148 0000  
+                            l4172 01BA                              l4180 0000                              l4244 0076  
+                            l4236 005A                              l4228 0000                              l4260 0000  
+                            l4324 0000                              l4158 0000                              l4174 0000  
+                            l4166 0000                              l4182 0000                              l4246 007D  
+                            l4238 0061                              l4190 0000                              l4270 0000  
+                            l4262 0000                              l4254 0000                              l4326 01F4  
+                            l4318 0000                              l4184 0000                              l4280 00E8  
+                            l4272 0000                              l4264 0000                              l4256 00D2  
+                            l4328 0000                              l4178 01BF                              l4186 0000  
+                            l4282 00EC                              l4274 0000                              l4266 0000  
+                            l4258 0000                              l4188 0000                              l4196 0000  
+                            l4276 0000                              l4268 0000                              l4198 001D  
+                            l4278 0000                              l2960 0000                              l4392 00F5  
+                            l4296 00ED                              l4298 0000                              l2963 0000  
+                            l2957 0000                              l2982 0000                              l2966 0000  
+                            l3954 0000                              l2979 0270                              l3956 027D  
+                            l3958 027A                              _T0IE 005D                              _T0IF 005A  
+                            _T0CS 040D                              _RAIE 005B                              _RAIF 0058  
+                            _INTS 01C3                              _TMR0 0001     __size_of_Bright_GradualChange 0015  
+                            _main 01EA                       _G_WorkState 0046                              btemp 007E  
+                            start 000F                  ??_System_1s_Task 0070                             ?_INTS 0070  
+ __end_of_System_GetLoopClockTick 0275                             ?_main 0070                             _ANSEL 0091  
+                           _IOCA2 04B2                             _T2CON 0012                             _PORTA 0005  
+                           _PORTC 0007                 ?_initial_ccp1_pwm 0070                             _TRISA 0085  
+                           _TRISC 0087                             _WPUA2 04AA                    _system_initial 026A  
+                           _nRAPU 040F                ??_initial_ccp1_pwm 0046                             pclath 000A  
+                __end_of_Deal_Key 0090                             status 0003                             wtemp0 007E  
+                    __end_of_INTS 01D8             __size_of_System_Clock 0008                      __end_of_main 01FA  
+                          ??_INTS 0074                  __end_of_Scan_Key 00CD                            ??_main 0046  
+          __end_of_system_initial 0270                        _LongKeyCnt 0030             __end_of_open_ccp1_pwm 027D  
+               ??_System_1ms_Task 0070                            i1S4398 0275                            _CCPR1L 0013  
+                          i1l3006 01AC                            i1l4000 0000                            i1l4010 0000  
+                          i1l4004 0000                            i1l2332 009E                            i1l4100 0000  
+                          i1l2334 00A9                            i1l4040 0000                            i1l4104 0000  
+                          i1l4112 0000                            i1l4120 0151                            i1l4106 0000  
+                          i1l4114 0147                            i1l4050 0000                            i1l4108 0000  
+                          i1l4052 0000                            i1l4070 0000                            i1l4062 019E  
+                          i1l4054 0000                            i1l4048 0134                            i1l4080 0000  
+                          i1l4074 0000                            i1l4058 01AD                            i1l4076 0000  
+                          i1l4068 0000                            i1l4084 0000                            i1l4092 0000  
+                          i1l4078 0000                            i1l4094 0000                            i1l4086 0000  
+                          i1l4096 0000                            i1l4088 0000                            i1l4098 0000  
+                          i1l3930 0000                            i1l3940 0000                            i1l3932 0000  
+                          i1l3924 0000                      _System_Clock 0253                            i1l3950 0000  
+                          i1l3942 0000                            i1l3934 01CB                            i1l3960 0090  
+                          i1l3952 0000                            i1l3944 0000                            i1l3928 0000  
+                          i1l2985 0000                            i1l3970 0000                            i1l3962 0000  
+                          i1l3946 0000                            i1l3938 0000                            i1l3980 0000  
+                          i1l3972 0000                            i1l3964 0000                            i1l3948 0000  
+                          i1l3990 00B2                            i1l3982 0000                            i1l3974 0000  
+                          i1l3966 0000                            i1l3984 00AA                            i1l3978 0000  
+                          i1l3996 0000                            i1l3988 00B0                            i1l3998 00BC  
+               ?_System_10ms_Task 0070                            _TRISA2 042A                            _TRISC0 0438  
+                          _TRISC1 0439                            _TRISC5 043D       __size_of_System_Timing_Task 001E  
+              ??_System_10ms_Task 0070                     ?_initial_port 0070                  ??_close_ccp1_pwm 003A  
+                          ___wmul 0164                       _KeyFlagBits 002E                            clrloop 0244  
+                 ?_system_initial 0070                            saved_w 007E           __size_of_Timing_In_Work 001D  
+               _System_100ms_Task 025B                ?_System_100ms_Task 0070                    ??_initial_port 003A  
+             ??_System_100ms_Task 0070                    __pcstackCOMMON 0070                 _System_250ms_Task 017D  
+               _System_500ms_Task 0216                ?_System_250ms_Task 0070                ?_System_500ms_Task 0070  
+                       ?_Deal_Key 0070               ??_System_250ms_Task 0070               ??_System_500ms_Task 0070  
+       __end_of_System_100ms_Task 0263                        __pbssBANK0 0020                        _pKeyResult 007D  
+        ??_set_dutyCycle_ccp1_pwm 0042                         ?_Scan_Key 0070           __size_of_Deal_WorkState 0034  
+       __end_of_System_250ms_Task 0196         __end_of_System_500ms_Task 0224                        __pmaintext 01EA  
+                         ?___wmul 003A                    _DutyCycleValue 0048                        __pintentry 0004  
+                         _CCP1CON 0015      __end_of_Bright_GradualChange 01C3                        ??_Deal_Key 0046  
+                         _G_1sCnt 0028          ?_System_GetLoopClockTick 0070                        ??_Scan_Key 0070  
+       __size_of_initial_ccp1_pwm 000E                   _System_1ms_Task 0196                   __size_of___wmul 0019  
+                         _pKeyCnt 007B              __end_of_initial_port 01EA        __size_of_System_100ms_Task 0008  
+                  _Timing_In_Work 0147                         _G_10msCnt 0078              end_of_initialization 022D  
+ __size_of_set_dutyCycle_ccp1_pwm 0028        __size_of_System_250ms_Task 0019           __size_of_initial_osccon 0001  
+         __size_of_initial_timer0 000B        __size_of_System_500ms_Task 000E                  ??_system_initial 0046  
+       __size_of_System_10ms_Task 0009            __end_of_Timing_In_Work 0164           __size_of_System_1s_Task 000E  
+      __end_of_System_Timing_Task 0147              _Bright_GradualChange 01AE           __end_of_System_1ms_Task 01AE  
+                       _ChangeCnt 0036                    _Deal_WorkState 00CD                     _TimeFlag1Bits 0032  
+          __size_of_open_ccp1_pwm 0003               _G_Timing_InWork_Cnt 0024                    __end_of___wmul 017D  
+          _set_dutyCycle_ccp1_pwm 0101                         _KeyBuffer 0038               start_initialization 0224  
+                 ?_Timing_In_Work 0070                 __size_of_Deal_Key 0080             ?_Bright_GradualChange 0070  
+          __end_of_Deal_WorkState 0101                  _initial_ccp1_pwm 01FA   set_dutyCycle_ccp1_pwm@dutyCycle 0040  
+               __size_of_Scan_Key 003D                          ??___wmul 003E                       _pKeyBuffer1 007A  
+           __size_of_initial_port 0012   set_dutyCycle_ccp1_pwm@pwm_Value 0044           __size_of_close_ccp1_pwm 0003  
+                   _open_ccp1_pwm 027A                       __pbssCOMMON 0078                       _pKeyNullCnt 007C  
+                   __pcstackBANK0 003A                   ?_Deal_WorkState 0070                  ?_System_1ms_Task 0070  
+                       __pnvBANK0 0046                    _initial_osccon 0280                    _initial_timer0 022F  
+__size_of_System_GetLoopClockTick 0005                      _initial_port 01D8                         __ptext470 026A  
+                       __ptext471 01AE                         __ptext480 0270                         __ptext472 01FA  
+                       __ptext481 01C3                         __ptext473 0101                         __ptext490 0129  
+                       __ptext482 0253                         __ptext474 0164                         __ptext491 0090  
+                       __ptext483 0196                         __ptext475 022F                         __ptext492 0000  
+                       __ptext484 0147                         __ptext476 01D8                         __ptext468 00CD  
+                       __ptext485 0208                         __ptext477 0280                         __ptext469 0010  
+                       __ptext486 0216                         __ptext478 027A                         __ptext487 017D  
+                       __ptext479 027D                         __ptext488 025B                         __ptext489 023A  
+                _System_10ms_Task 023A                         __pswtext1 024B                         __pswtext2 0263  
+                       __pswtext3 0275                    ?_open_ccp1_pwm 0070                    _System_1s_Task 0208  
+          ??_Bright_GradualChange 0046                     ?_System_Clock 0070                 interrupt_function 0004  
+          __end_of_initial_osccon 0281            __end_of_initial_timer0 023A                    ___wmul@product 003E  
+                        _G_KeyCnt 0049                 ___wmul@multiplier 003A                          _Deal_Key 0010  
+          __end_of_System_1s_Task 0216                    ??_System_Clock 0074                          _KeyValue 0039  
+                 ?_initial_osccon 0070                   ?_initial_timer0 0070                          _Scan_Key 0090  
+              _System_Timing_Task 0129           ?_set_dutyCycle_ccp1_pwm 0040                  ??_Timing_In_Work 0070  
+                 ??_open_ccp1_pwm 003A               ?_System_Timing_Task 0070          __end_of_initial_ccp1_pwm 0208  
+                  _close_ccp1_pwm 027D                   ?_System_1s_Task 0070                     __size_of_INTS 0015  
+                      _G_100msCnt 0037              ??_System_Timing_Task 0070                     __size_of_main 0010  
+                      _G_250msCnt 002A                        _G_500msCnt 002C           _System_GetLoopClockTick 0270  
+                        clear_ram 0243    __end_of_set_dutyCycle_ccp1_pwm 0129            __end_of_close_ccp1_pwm 0280  
+         __size_of_system_initial 0006                  ??_Deal_WorkState 0046                          intlevel1 0000  
+        __end_of_System_10ms_Task 0243                        _G_1ms_Case 0079              __end_of_System_Clock 025B  
+                 ?_close_ccp1_pwm 0070         ??_System_GetLoopClockTick 003A  

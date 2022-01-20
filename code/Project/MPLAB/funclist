@@ -1,0 +1,26 @@
+_Deal_Key: CODE, 16 0 128
+_initial_osccon: CODE, 640 0 1
+_open_ccp1_pwm: CODE, 634 0 3
+_System_Timing_Task: CODE, 297 0 30
+_System_1ms_Task: CODE, 406 0 24
+_INTS: CODE, 451 0 21
+_Bright_GradualChange: CODE, 430 0 21
+_main: CODE, 490 0 16
+_system_initial: CODE, 618 0 6
+_Deal_WorkState: CODE, 205 0 52
+_Scan_Key: CODE, 144 0 61
+_close_ccp1_pwm: CODE, 637 0 3
+_System_GetLoopClockTick: CODE, 624 0 5
+_System_Clock: CODE, 595 0 8
+_System_10ms_Task: CODE, 570 0 9
+_initial_port: CODE, 472 0 18
+_set_dutyCycle_ccp1_pwm: CODE, 257 0 40
+___wmul: CODE, 356 0 25
+_Timing_In_Work: CODE, 327 0 29
+_initial_ccp1_pwm: CODE, 506 0 14
+_System_100ms_Task: CODE, 603 0 8
+_System_500ms_Task: CODE, 534 0 14
+_System_250ms_Task: CODE, 381 0 25
+_System_1s_Task: CODE, 520 0 14
+_initial_timer0: CODE, 559 0 11
+Total: 586
